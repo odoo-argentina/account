@@ -71,7 +71,7 @@ Funcionalidades:
 
  ''',
  'init_xml': [],
- 'installable': True,
+ 'installable': False,
  'license': 'AGPL-3',
  'name': 'Argentina - Generador de Talonarios',
  'test': ['test/products.yml',
@@ -81,6 +81,6 @@ Funcionalidades:
           'test/inv_ri2ri.yml',
           'test/inv_ri2rm.yml',
           'test/bug_1042944.yml'],
- 'version': '8.0.5.0',
+ 'version': '9.0.0.0.0',
  'website': 'https://github.com/odoo-l10n-ar/l10n_ar_invoice'}
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
