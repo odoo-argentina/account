@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Argentina - Planes Contables',
-    'author':   'Moldeo Interactive,ADHOC SA,OpenERP - Team de Localización Argentina',
+    'author': 'Moldeo Interactive,ADHOC SA,OpenERP - Team de Localización Argentina',
     'category': 'Localization/Account Charts',
     'license': 'AGPL-3',
     'depends': [
@@ -16,7 +16,7 @@
         # 'data/account_chart_monotrib.xml',
         # 'data/account_chart_coop.xml',
     ],
-    'installable': True,
+    'installable': False,
     'version': '9.0.0.0.0',
 }
 
