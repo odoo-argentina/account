@@ -12,8 +12,8 @@
     'test': [],
     'data': [
         'data/account_chart_respinsc.xml',
-        'data/account_chart_monotrib.xml',
         # TODO include
+        # 'data/account_chart_monotrib.xml',
         # 'data/account_chart_coop.xml',
     ],
     'installable': True,
