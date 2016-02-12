@@ -21,6 +21,9 @@ class ResCompany(models.Model):
     start_date = fields.Date(
         related='partner_id.start_date',
         )
+    afip_responsible_type_id = fields.Many2one(
+        related='partner_id.afip_responsible_type_id',
+        )
     # TODO ver si lo movemos a account_document
     # journal_ids = fields.One2many(
     #     'account.journal',

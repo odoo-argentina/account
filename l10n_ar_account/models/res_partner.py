@@ -6,7 +6,7 @@
 from openerp import fields, models
 
 
-class res_partner(models.Model):
+class ResPartner(models.Model):
     _inherit = 'res.partner'
 
     iibb = fields.Char(
@@ -15,4 +15,8 @@ class res_partner(models.Model):
         )
     start_date = fields.Date(
         'Start-up Date'
+        )
+    afip_responsible_type_id = fields.Many2one(
+        'afip.responsible.type',
+        'AFIP Responsible Type',
         )

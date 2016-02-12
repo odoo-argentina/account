@@ -8,7 +8,7 @@ import logging
 _logger = logging.getLogger(__name__)
 
 
-class afip_incoterm(models.Model):
+class AfipIncoterm(models.Model):
     _name = 'afip.incoterm'
     _description = 'Afip Incoterm'
 

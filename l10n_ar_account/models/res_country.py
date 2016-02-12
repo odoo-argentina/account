@@ -6,7 +6,7 @@
 from openerp import fields, models
 
 
-class afip_country(models.Model):
+class ResCountry(models.Model):
     _inherit = 'res.country'
 
     afip_code = fields.Char(

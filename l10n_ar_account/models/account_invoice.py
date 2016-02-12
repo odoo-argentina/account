@@ -3,15 +3,13 @@
 # For copyright and license notices, see __openerp__.py file in module root
 # directory
 ##############################################################################
-from openerp import models, fields, api, _
-from openerp.exceptions import except_orm, Warning
-import openerp.addons.decimal_precision as dp
-import re
+from openerp import models, fields, api
+# from openerp.exceptions import except_orm, Warning
 import logging
 _logger = logging.getLogger(__name__)
 
 
-class account_invoice(models.Model):
+class AccountInvoice(models.Model):
     _inherit = "account.invoice"
 
     currency_rate = fields.Float(
@@ -20,6 +18,15 @@ class account_invoice(models.Model):
         digits=(16, 4),
         # TODO make it editable, we hace to change move create method
         readonly=True,
+        )
+    document_letter_id = fields.Many2one(
+        related='document_type_id.document_letter_id',
+        )
+    afip_responsible_type_id = fields.Many2one(
+        'afip.responsible.type',
+        string='AFIP Responsible Type',
+        readonly=True,
+        copy=False,
         )
     # TODO chequear si los necesitamos
     # invoice_number = fields.Integer(
@@ -79,7 +86,7 @@ class account_invoice(models.Model):
         states={'draft': [('readonly', False)]}
         )
     # formated_vat = fields.Char(
-    #     string='Responsability',
+    #     string='responsible',
     #     related='commercial_partner_id.formated_vat',
     #     )
     point_of_sale_type = fields.Selection(
@@ -137,6 +144,90 @@ class account_invoice(models.Model):
                 if afip_concept == '3':
                     afip_concept = '4'
         self.afip_concept = afip_concept
+
+    @api.multi
+    def get_localization_invoice_vals(self):
+        self.ensure_one()
+        if self.localization == 'argentina':
+            commercial_partner = self.partner_id.commercial_partner_id
+            return {'afip_responsible_type_id': (
+                    commercial_partner.afip_responsible_type_id.id)}
+        else:
+            return super(
+                AccountInvoice, self).get_localization_invoice_vals()
+
+    @api.multi
+    def _get_available_journal_document_types(self):
+        """
+        This function search for available document types regarding:
+        * Journal
+        * Partner
+        * Company
+        * Documents configuration
+        If needed, we can make this funcion inheritable and customizable per
+        localization
+        """
+        self.ensure_one()
+        if self.localization != 'argentina':
+            return super(
+                AccountInvoice, self)._get_available_journal_document_types()
+        invoice_type = self.type
+
+        journal_document_types = journal_document_type = self.env[
+            'account.journal.document.type']
+
+        if invoice_type in [
+                'out_invoice', 'in_invoice', 'out_refund', 'in_refund']:
+
+            if self.use_documents:
+
+                letters = self.journal_id.get_journal_letter(
+                    counterpart_partner=self.commercial_partner_id)
+
+                domain = [
+                    ('journal_id', '=', self.journal_id.id),
+                    '|',
+                    ('document_type_id.document_letter_id', 'in', letters.ids),
+                    ('document_type_id.document_letter_id', '=', False),
+                    ]
+
+                # If internal_type in context we try to serch specific document
+                # for eg used on debit notes
+                internal_type = self._context.get('internal_type', False)
+                if internal_type:
+                    journal_document_type = journal_document_type.search(
+                        domain + [
+                            ('document_type_id.internal_type',
+                                '=', internal_type)], limit=1)
+
+                # For domain, we search all documents
+                journal_document_types = journal_document_types.search(domain)
+
+                # If not specific document type found, we choose another one
+                if not journal_document_type and journal_document_types:
+                    journal_document_type = journal_document_types[0]
+
+        if invoice_type == 'in_invoice':
+            other_document_types = (
+                self.commercial_partner_id.other_document_type_ids)
+
+            domain = [
+                ('journal_id', '=', self.journal_id.id),
+                ('document_type_id',
+                    'in', other_document_types.ids),
+                ]
+            other_journal_document_types = self.env[
+                'account.journal.document.type'].search(domain)
+
+            journal_document_types += other_journal_document_types
+            # if we have some document sepecific for the partner, we choose it
+            if other_journal_document_types:
+                journal_document_type = other_journal_document_types[0]
+
+        return {
+            'available_journal_document_types': journal_document_types,
+            'journal_document_type': journal_document_type,
+            }
 
     # @api.one
     # def _get_taxes_and_prices(self):
@@ -289,11 +380,11 @@ class account_invoice(models.Model):
     #     # Check invoice requiring vat
 
     #     # out invoice must have vat if are argentinian and from a company with
-    #     # responsability that requires vat
+    #     # responsible that requires vat
     #     sale_invoices_with_vat = self.search([(
     #         'id', 'in', argentinian_invoices.ids),
     #         ('type', 'in', ['out_invoice', 'out_refund']),
-    #         ('company_id.partner_id.responsability_id.vat_tax_required_on_sales_invoices',
+    #         ('company_id.partner_id.responsible_id.vat_tax_required_on_sales_invoices',
     #             '=', True)])
 
     #     # check purchase invoice has supplier invoice number
@@ -364,4 +455,4 @@ class account_invoice(models.Model):
     #     for inv in self:
     #         inv.currency_rate = inv.currency_id.compute(
     #                 1., inv.company_id.currency_id)
-    #     return super(account_invoice, self).action_move_create()
+    #     return super(AccountInvoice, self).action_move_create()

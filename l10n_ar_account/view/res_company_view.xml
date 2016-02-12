@@ -7,17 +7,10 @@
             <field name="model">res.company</field>
             <field name="arch" type="xml">
                 <field name="vat" position="after">
-                    <field name="iibb"/>
-                    <field name="start_date" attrs="{'required': [('localization', '=', 'argentina')]}"/>
+                    <field name="afip_responsible_type_id" options="{'no_open': True, 'no_create': True}" attrs="{'required': [('localization', '=', 'argentina')], 'invisible': [('localization', '!=', 'argentina')]}"/>
+                    <field name="start_date" attrs="{'required': [('localization', '=', 'argentina')], 'invisible': [('localization', '!=', 'argentina')]}"/>
+                    <field name="iibb" attrs="{'invisible': [('localization', '!=', 'argentina')]}"/>
                 </field>
-<!--                  <notebook>
-                    <page string="Journals">
-                        <group col="1">
-                            <button name="%(action_account_journal_create_wizard)d" type="action" string="Create"/>
-                            <field name='journal_ids' context="{'tree_view_ref':'l10n_ar_invoice.view_account_journal_tree'}"/>
-                        </group>
-                    </page>
-                </notebook> -->
             </field>
         </record>
 

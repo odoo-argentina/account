@@ -1,6 +1,6 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_afip_responsability_manager,afip.responsability.manager,model_afip_responsability,account.group_account_manager,1,1,1,1
-access_afip_responsability_user,afip.responsability.user,model_afip_responsability,,1,0,0,0
+access_afip_responsible_manager,afip.responsible.manager,model_afip_responsible,account.group_account_manager,1,1,1,1
+access_afip_responsible_user,afip.responsible.user,model_afip_responsible,,1,0,0,0
 access_afip_document_type_manager,afip.document_type.manager,model_afip_document_type,account.group_account_manager,1,1,1,1
 access_afip_document_type_user,afip.document_type.user,model_afip_document_type,,1,0,0,0
 access_afip_document_class_manager,afip.document_class.manager,model_afip_document_class,account.group_account_manager,1,1,1,1

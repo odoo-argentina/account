@@ -3,11 +3,11 @@
 # For copyright and license notices, see __openerp__.py file in module root
 # directory
 ##############################################################################
-from openerp import fields, models, api
-# from openerp.exceptions import Warning
+from openerp import fields, models, api, _
+from openerp.exceptions import Warning
 
 
-class account_fiscal_position(models.Model):
+class AccountFiscalPosition(models.Model):
     _inherit = 'account.fiscal.position'
 
     afip_code = fields.Char(
@@ -17,7 +17,7 @@ class account_fiscal_position(models.Model):
         )
 
 
-class account_journal(models.Model):
+class AccountJournal(models.Model):
     _inherit = "account.journal"
 
     point_of_sale_type = fields.Selection([
@@ -63,3 +63,104 @@ class account_journal(models.Model):
             self.name = '%s %s %04d' % (
                 'Ventas', name, self.point_of_sale_number)
             self.code = 'V%04d' % (self.point_of_sale_number)
+
+    @api.multi
+    def get_journal_letter(self, counterpart_partner=False):
+        """Function to be inherited by others"""
+        self.ensure_one()
+        responsible = self.company_id.afip_responsible_type_id
+        if self.type == 'sale':
+            resp_field = 'issuer_ids'
+        elif self.type == 'purchase':
+            resp_field = 'receptor_ids'
+        else:
+            raise Warning('Letters not implemented for journal type %s' % (
+                self.type))
+        letters = self.env['account.document.letter'].search([
+            '|', (resp_field, 'in', responsible.id),
+            (resp_field, '=', False)])
+
+        if counterpart_partner:
+            counterpart_resp = counterpart_partner.afip_responsible_type_id
+            if self.type == 'sale':
+                letters = letters.filtered(
+                    lambda x: not x.receptor_ids or
+                    counterpart_resp in x.receptor_ids)
+            else:
+                letters = letters.filtered(
+                    lambda x: not x.issuer_ids or
+                    counterpart_resp in x.issuer_ids)
+        return letters
+
+    @api.multi
+    def update_journal_document_types(self):
+        """
+        It creates, for journal of type:
+            * sale: documents of internal types 'invoice', 'debit_note',
+                'credit_note' if there is a match for document letter
+        TODO complete here
+        """
+        self.ensure_one()
+        if self.localization != 'argentina':
+            return super(AccountJournal, self).update_journal_document_types()
+
+        if not self.use_documents:
+            return True
+
+        letters = self.get_journal_letter()
+
+        other_purchase_internal_types = ['in_document', 'ticket']
+
+        if self.type in ['purchase', 'sale']:
+            internal_types = ['invoice', 'debit_note', 'credit_note']
+            # for purchase we add other documents with letter
+            if self.type == 'purchase':
+                internal_types += other_purchase_internal_types
+        else:
+            raise Warning(_('Type %s not implemented yet' % self.type))
+
+        document_types = self.env['account.document.type'].search([
+            ('internal_type', 'in', internal_types),
+            '|', ('document_letter_id', 'in', letters.ids),
+            ('document_letter_id', '=', False)])
+
+        # for purchases we add in_documents and ticket whitout letters
+        # TODO ver que no hace falta agregar los tickets aca porque ahora le
+        # pusimos al tique generico la letra x entonces ya se agrega solo.
+        # o tal vez, en vez de usar letra x, lo deberiamos motrar tambien como
+        # factible por no tener letra y ser tique
+        if self.type == 'purchase':
+            document_types += self.env['account.document.type'].search([
+                ('internal_type', 'in', other_purchase_internal_types),
+                ('document_letter_id', '=', False)])
+
+        # take out documents that already exists
+        document_types = document_types - self.mapped(
+                    'journal_document_type_ids.document_type_id')
+
+        sequence = 10
+        for document_type in document_types:
+            sequence_id = False
+            if self.type == 'sale':
+                # Si es nota de debito nota de credito y same sequence,
+                # no creamos la secuencia, buscamos una que exista
+                if (
+                        document_type.internal_type in [
+                        'debit_note', 'credit_note'] and
+                        self.document_sequence_type == 'same_sequence'
+                        ):
+                    journal_document = self.journal_document_type_ids.search([
+                        ('document_type_id.document_letter_id', '=',
+                            document_type.document_letter_id.id),
+                        ('journal_id', '=', self.id)], limit=1)
+                    sequence_id = journal_document.sequence_id.id
+                else:
+                    sequence_id = self.env['ir.sequence'].create(
+                        document_type.get_document_sequence_vals(self)).id
+            self.journal_document_type_ids.create({
+                'document_type_id': document_type.id,
+                'sequence_id': sequence_id,
+                'journal_id': self.id,
+                'sequence': sequence,
+            })
+            sequence += 10

@@ -7,7 +7,7 @@ from openerp import models, fields, api, _
 import openerp.addons.decimal_precision as dp
 
 
-class account_invoice_line(models.Model):
+class AccountInvoiceLine(models.Model):
 
     """
     En argentina como no se diferencian los impuestos en las facturas, excepto
