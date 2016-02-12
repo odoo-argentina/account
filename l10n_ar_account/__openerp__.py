@@ -25,6 +25,7 @@
           'data/product_uom.xml',
           'data/res_currency.xml',
           'data/res_partner.xml',
+          # TODO analizar y migrar
           # 'data/account_financial_report_data.xml',
           # 'data/account_payment_term.xml',
           'wizard/account_invoice_refund_view.xml',
@@ -41,6 +42,7 @@
           'view/afip_responsability_type_view.xml',
           'view/account_document_letter_view.xml',
           'view/account_document_type_view.xml',
+          # TODO migrar
           # 'report/invoice_analysis.xml',
           'security/ir.model.access.csv',
       ],
