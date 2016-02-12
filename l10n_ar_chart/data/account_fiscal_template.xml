@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <openerp>
     <data noupdate="True">
-        <record model='account.fiscal.position' id='fiscal_position_zona_franca'>
+        <record model='account.fiscal.position.template' id='fiscal_position_template_zona_franca'>
             <field name='afip_code'>Z</field>
             <field name='name'>Exportaciones a la zona franca</field>
         </record>
 
-        <record model='account.fiscal.position' id='fiscal_position_exportaciones_al_exterior'>
+        <record model='account.fiscal.position.template' id='fiscal_position_template_exportaciones_al_exterior'>
             <field name='afip_code'>X</field>
             <field name='name'>Exportaciones al exterior</field>
         </record>
 
-        <record model='account.fiscal.position' id='fiscal_position_operaciones_exentas'>
+        <record model='account.fiscal.position.template' id='fiscal_position_template_operaciones_exentas'>
             <field name='afip_code'>E</field>
             <field name='name'>Operaciones exentas</field>
         </record>
 
-        <record model='account.fiscal.position' id='fiscal_position_no_gravado'>
+        <record model='account.fiscal.position.template' id='fiscal_position_template_no_gravado'>
             <field name='afip_code'>N</field>
             <field name='name'>No gravado</field>
         </record>
 
-        <record model='account.fiscal.position' id='fiscal_position_operaciones_de_canje'>
+        <record model='account.fiscal.position.template' id='fiscal_position_template_operaciones_de_canje'>
             <field name='afip_code'>C</field>
             <field name='name'>Operaciones de Canje</field>
         </record>

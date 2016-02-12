@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+  <data noupdate="0">
+        <!-- account tax tag -->
+<!--         <record id="tax_tag_83_not_deductible" model="account.account.tag">
+            <field name="name">Belgium VAT Form: Tax not deductible (grid 83)</field>
+            <field name="applicability">taxes</field>
+        </record>
+        <record id="tax_tag_85_not_deductible" model="account.account.tag">
+            <field name="name">Belgium VAT Form: Tax not deductible (grid 85)</field>
+            <field name="applicability">taxes</field>
+        </record> -->
+
+        <!-- account.tax.template -->
+<!--         <record id="attn_VAT-OUT-21-S" model="account.tax.template">
+            <field name="sequence">10</field>
+            <field name="description">21%</field>
+            <field name="name">21% Services</field>
+            <field name="refund_account_id" ref="a451054"/>
+            <field name="account_id" ref="a451054"/>
+            <field name="price_include" eval="0"/>
+            <field name="amount">21</field>
+            <field name="amount_type">percent</field>
+            <field name="type_tax_use">sale</field>
+            <field name="chart_template_id" ref="l10nbe_chart_template"/>
+            <field name="tag_ids" eval="[(6,0,[ref('tax_tag_03'), ref('tax_tag_49'), ref('tax_tag_54'), ref('tax_tag_64')])]"/>
+        </record>
+        <record id="attn_VAT-OUT-21-L" model="account.tax.template">
+            <field name="sequence">11</field>
+            <field name="description">21%</field>
+            <field name="name">21%</field>
+            <field name="refund_account_id" ref="a451054"/>
+            <field name="account_id" ref="a451054"/>
+            <field name="price_include" eval="0"/>
+            <field name="amount">21</field>
+            <field name="amount_type">percent</field>
+            <field name="type_tax_use">sale</field>
+            <field name="chart_template_id" ref="l10nbe_chart_template"/>
+            <field name="tag_ids" eval="[(6,0,[ref('tax_tag_03'), ref('tax_tag_49'), ref('tax_tag_54'), ref('tax_tag_64')])]"/>
+        </record> -->
+  </data>
+</openerp>
