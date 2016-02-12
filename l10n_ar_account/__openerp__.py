@@ -42,7 +42,6 @@
           'view/account_document_letter_view.xml',
           'view/account_document_type_view.xml',
           # 'view/res_partner_bank_view.xml',
-          # 'invoice_template.xml',
           # 'report/invoice_analysis.xml',
           # 'security/ir.model.access.csv',
           # 'security/l10n_ar_invoice_security.xml',
