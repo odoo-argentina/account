@@ -9,7 +9,7 @@
 # Nicolas Mac Rouillon <nmr@ingadhoc.com>, 2015
 msgid ""
 msgstr ""
-"Project-Id-Version: odoo-argentina (8.0)\n"
+"Project-Id-Version: odoo-argentina (9.0)\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-10-18 02:29+0000\n"
 "PO-Revision-Date: 2015-10-19 20:25+0000\n"

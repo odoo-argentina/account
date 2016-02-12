@@ -10,6 +10,7 @@
     'summary': '',
     'depends': [
           'account_document',
+          'l10n_ar_partner',
         ],
     'external_dependencies': {
     },
@@ -26,7 +27,6 @@
           'data/res_partner.xml',
           # 'data/account_financial_report_data.xml',
           # 'data/account_payment_term.xml',
-          # 'wizard/account_journal_create_wizard_view.xml',
           'wizard/account_invoice_refund_view.xml',
           'view/res_partner_view.xml',
           'view/res_company_view.xml',
@@ -42,7 +42,7 @@
           'view/account_document_letter_view.xml',
           'view/account_document_type_view.xml',
           # 'report/invoice_analysis.xml',
-          # 'security/ir.model.access.csv',
+          'security/ir.model.access.csv',
       ],
     'demo': [
           # 'demo/partner_demo.xml',

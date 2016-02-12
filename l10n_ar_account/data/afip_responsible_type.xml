@@ -5,13 +5,13 @@
             <field name='code'>1</field>
             <field name='name'>IVA Responsable Inscripto</field>
             <field name='active' eval="True"/>
-            <field name='subjected_tax_group_ids' eval="[(6, 0, [ref('tax_group_vat_taxes')])]"/>
+            <!-- <field name='subjected_tax_group_ids' eval="[(6, 0, [ref('tax_group_vat_taxes')])]"/> -->
         </record>
         <record model='afip.responsible.type' id='res_IVARIFM'>
             <field name='code'>1FM</field>
             <field name='name'>IVA Responsable Inscripto Factura M</field>
             <field name='active' eval="True"/>
-            <field name='subjected_tax_group_ids' eval="[(6, 0, [ref('tax_group_vat_taxes')])]"/>
+            <!-- <field name='subjected_tax_group_ids' eval="[(6, 0, [ref('tax_group_vat_taxes')])]"/> -->
         </record>
         <record model='afip.responsible.type' id='res_IVARNI'>
             <field name='code'>2</field>
@@ -62,7 +62,7 @@
             <field name='code'>11</field>
             <field name='name'>IVA Responsable Inscripto – Agente de Percepción</field>
             <field name='active' eval="True"/>
-            <field name='subjected_tax_group_ids' eval="[(6, 0, [ref('tax_group_vat_taxes')])]"/>
+            <!-- <field name='subjected_tax_group_ids' eval="[(6, 0, [ref('tax_group_vat_taxes')])]"/> -->
         </record>
         <record model='afip.responsible.type' id='res_EVENTUAL'>
             <field name='code'>12</field>

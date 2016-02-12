@@ -93,7 +93,7 @@ class AccountJournal(models.Model):
         return letters
 
     @api.multi
-    def update_journal_document_types(self):
+    def _update_journal_docsument_types(self):
         """
         It creates, for journal of type:
             * sale: documents of internal types 'invoice', 'debit_note',
@@ -102,7 +102,8 @@ class AccountJournal(models.Model):
         """
         self.ensure_one()
         if self.localization != 'argentina':
-            return super(AccountJournal, self).update_journal_document_types()
+            return super(
+                AccountJournal, self)._update_journal_docsument_types()
 
         if not self.use_documents:
             return True

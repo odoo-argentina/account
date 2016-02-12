@@ -20,6 +20,3 @@ class AfipIncoterm(models.Model):
         'Name',
         required=True
         )
-
-    _sql_constraints = [('number_unique', 'unique(number, company_id)',
-                         'Number Must be Unique per Company!'), ]
