@@ -6,9 +6,11 @@
 from openerp import fields, models
 
 
-class ProductUom(models.Model):
-    _inherit = 'product.uom'
+class ResCountry(models.Model):
+    _inherit = 'res.country'
 
     afip_code = fields.Char(
-        'Afip Code'
+        'Afip Code', size=3
         )
+
+# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -3,7 +3,7 @@
     <data>
     <!-- Partners for companies -->
         <record id="partner_ri" model="res.partner">
-            <field name='responsability_id' ref='res_IVARI'/>
+            <field name='afip_responsible_type_id' ref='res_IVARI'/>
             <field name='vat'>AR30111111118</field>
             <field name='document_type_id' ref="dt_CUIT"/>
             <field name='document_number'>30111111118</field>
@@ -21,7 +21,7 @@
             <!-- <field name="image" type="base64" file="base/static/img/main_partner-image.png"/> -->
         </record>
         <record id="partner_mono" model="res.partner">
-            <field name='responsability_id' ref='res_RM'/>
+            <field name='afip_responsible_type_id' ref='res_RM'/>
             <field name='vat'>AR20222222223</field>
             <field name='document_type_id' ref="dt_CUIT"/>
             <field name='document_number'>20222222223</field>

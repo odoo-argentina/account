@@ -8,8 +8,8 @@ from openerp import models, fields, api
 
 class account_invoice_refund(models.TransientModel):
 
-    # we inherit refund creation to choose a company journal and also try to
-    # choose a journal of same point of sale
+    # we inherit refund creation to choose a company journal and we send
+    # service dates
 
     _inherit = 'account.invoice.refund'
 
@@ -32,19 +32,9 @@ class account_invoice_refund(models.TransientModel):
              ('company_id', '=', self.invoice_id.company_id.id)])
         periods = self.env['account.period'].search(
             [('company_id', '=', self.invoice_id.company_id.id)])
-        # self.journal_type = journal_type
 
-        point_of_sale = self.invoice_id.journal_id.point_of_sale_id
-        if point_of_sale:
-            journal = self.env['account.journal'].search(
-                [('type', '=', journal_type),
-                 ('company_id', '=', self.invoice_id.company_id.id),
-                 ('point_of_sale_id', '=', point_of_sale.id),
-                 ], limit=1)
-            if not journal and journals:
-                journal = journals[0]
-        if journal:
-            self.journal_id = journal.id
+        if journals:
+            self.journal_id = journals[0].id
         return {'domain': {
             'journal_id': [('id', 'in', journals.ids)],
             'period': [('id', 'in', periods.ids)]

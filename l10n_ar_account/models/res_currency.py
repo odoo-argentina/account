@@ -6,9 +6,9 @@
 from openerp import fields, models
 
 
-class ProductUom(models.Model):
-    _inherit = 'product.uom'
+class ResCurrency(models.Model):
+    _inherit = "res.currency"
 
     afip_code = fields.Char(
-        'Afip Code'
+        'AFIP Code', size=4
         )
