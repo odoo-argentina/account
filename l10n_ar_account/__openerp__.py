@@ -20,7 +20,6 @@
           'data/account_document_letter.xml',
           'data/account.document.type.csv',
           'data/afip_incoterm.xml',
-          'data/account_fiscal_position.xml',
           'data/res_country_afip_code.xml',
           'data/product_uom.xml',
           'data/res_currency.xml',

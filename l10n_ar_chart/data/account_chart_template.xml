@@ -8,7 +8,7 @@
             <field name="params" eval="{'menu_id': ref('account.menu_board_journal_1')}"/>
         </record>
         <record id="base.open_menu" model="ir.actions.todo">
-            <field name="action_id" ref="action_client_l10n_be_menu"/>
+            <field name="action_id" ref="action_client_l10n_ar_menu"/>
             <field name="state">open</field>
         </record>
 
