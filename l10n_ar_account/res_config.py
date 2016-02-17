@@ -7,9 +7,8 @@ class AccountConfigSettings(models.TransientModel):
     _inherit = 'account.config.settings'
 
     _point_of_sale_types_selection = (
-            lambda self, *args, **kwargs: self.env[
-                'account.journal']._get_point_of_sale_types(
-                *args, **kwargs))
+        lambda self, *args, **kwargs: self.env[
+            'account.journal']._get_point_of_sale_types(*args, **kwargs))
 
     point_of_sale_type = fields.Selection(
         _point_of_sale_types_selection,
