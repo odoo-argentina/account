@@ -935,7 +935,7 @@
             <field name="name">Impuestos a los créditos bancarios</field>
         </record>
 
-        <record model="account.account.template" id="ri_impuestos_transacciones_bancarias">
+        <record model="account.account.template" id="ri_impuestos_debitos_bancarios">
             <field name="chart_template_id" ref="l10nar_ri_chart_template"/>
             <field name="code">5.1.04.00.070</field>
             <field name="user_type_id" ref="account.data_account_type_expenses"/>

@@ -7,7 +7,7 @@ from openerp import fields, models, _
 from openerp import tools
 
 
-class account_invoice_line_report(models.Model):
+class AccountInvoiceLineReport(models.Model):
 
     _name = "account.invoice.line.report"
     _description = "Invoices Statistics"
@@ -37,9 +37,9 @@ class account_invoice_line_report(models.Model):
     ], 'Invoice State', readonly=True)
     date_invoice = fields.Date('Date Invoice', readonly=True)
     date_invoice_from = fields.Date(
-        compute=lambda *a, **k: {}, method=True, string=_("Date Invoice from"))
+        compute=lambda *a, **k: {}, method=True, string="Date Invoice from")
     date_invoice_to = fields.Date(
-        compute=lambda *a, **k: {}, method=True, string=_("Date Invoice to"))
+        compute=lambda *a, **k: {}, method=True, string="Date Invoice to")
     amount_total = fields.Float(
         'Invoice Total', readonly=True, group_operator="sum")
     ean13 = fields.Char('EAN13', size=13, help='Barcode', readonly=True)

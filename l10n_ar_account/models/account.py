@@ -4,7 +4,7 @@
 # directory
 ##############################################################################
 from openerp import fields, models, api, _
-from openerp.exceptions import Warning
+from openerp.exceptions import UserError
 
 
 class AccountFiscalPosition(models.Model):
@@ -88,7 +88,7 @@ class AccountJournal(models.Model):
         elif self.type == 'purchase':
             resp_field = 'receptor_ids'
         else:
-            raise Warning('Letters not implemented for journal type %s' % (
+            raise UserError('Letters not implemented for journal type %s' % (
                 self.type))
         letters = self.env['account.document.letter'].search([
             '|', (resp_field, 'in', responsible.id),
@@ -132,7 +132,7 @@ class AccountJournal(models.Model):
             if self.type == 'purchase':
                 internal_types += other_purchase_internal_types
         else:
-            raise Warning(_('Type %s not implemented yet' % self.type))
+            raise UserError(_('Type %s not implemented yet' % self.type))
 
         document_types = self.env['account.document.type'].search([
             ('internal_type', 'in', internal_types),

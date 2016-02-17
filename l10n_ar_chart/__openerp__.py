@@ -26,6 +26,8 @@
         '../account/demo/account_invoice_demo.yml',
     ],
     'installable': True,
+    'images': [
+    ],
     'version': '9.0.0.0.0',
 }
 
