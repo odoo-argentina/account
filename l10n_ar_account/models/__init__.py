@@ -15,4 +15,5 @@ from . import res_company
 from . import account_invoice_line
 from . import account_invoice
 from . import product_uom
+from . import account_chart_template
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

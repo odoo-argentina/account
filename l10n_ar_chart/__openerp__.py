@@ -8,20 +8,20 @@
         'l10n_multilang',
         # for afip_code on fiscal position and other tax modifications
         'l10n_ar_account',
-        'account',
+        # 'account',
     ],
     'test': [],
     'data': [
         'data/account_chart_template.xml',
         'data/account_chart_respinsc.xml',
-        'data/account_tax_template.xml',
+        # 'data/account_tax_template.xml',
         'data/account_fiscal_template.xml',
         'data/account_chart_template.yml',
         'data/menuitem.xml',
     ],
     'demo': [
         # TODO analizar si necesitamos
-        # 'demo/l10n_ar_demo.yml',
+        'demo/l10n_ar_demo.yml',
         '../account/demo/account_bank_statement.yml',
         '../account/demo/account_invoice_demo.yml',
     ],

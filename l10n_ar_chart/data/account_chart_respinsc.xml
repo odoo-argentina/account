@@ -17,6 +17,7 @@
             <field name="spoken_languages" eval="'es_AR'"/>
             <field name="bank_account_code_prefix">1.1.01.01</field>
             <field name="cash_account_code_prefix">1.1.01.01</field>
+            <field name="localization">argentina</field>
             <field name="code_digits">13</field>
         </record>
 

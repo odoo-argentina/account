@@ -41,13 +41,14 @@
           'view/afip_responsability_type_view.xml',
           'view/account_document_letter_view.xml',
           'view/account_document_type_view.xml',
+          'res_config_view.xml',
           # TODO migrar
           # 'report/invoice_analysis.xml',
           'security/ir.model.access.csv',
       ],
     'demo': [
-          # 'demo/partner_demo.xml',
-          # 'demo/company_demo.xml',
+          'demo/partner_demo.xml',
+          'demo/company_demo.xml',
           # 'demo/account_demo.xml',
           # 'demo/ri_purchase_invoice_demo.xml',
           # 'demo/ri_sale_invoice_demo.xml',

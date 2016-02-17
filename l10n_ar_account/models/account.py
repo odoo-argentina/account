@@ -20,21 +20,29 @@ class AccountFiscalPosition(models.Model):
 class AccountJournal(models.Model):
     _inherit = "account.journal"
 
-    point_of_sale_type = fields.Selection([
-        ('manual', 'Manual'),
-        ('preprinted', 'Preprinted'),
-        ('online', 'Online'),
-        # Agregados por otro modulo
-        # ('electronic', 'Electronic'),
-        # ('fiscal_printer', 'Fiscal Printer'),
-        ],
+    @api.model
+    def _get_point_of_sale_types(self):
+        return [
+            ('manual', 'Manual'),
+            ('preprinted', 'Preprinted'),
+            ('online', 'Online'),
+            # Agregados por otro modulo
+            # ('electronic', 'Electronic'),
+            # ('fiscal_printer', 'Fiscal Printer'),
+            ]
+
+    _point_of_sale_types_selection = (
+            lambda self, *args, **kwargs: self._get_point_of_sale_types(
+                *args, **kwargs))
+
+    point_of_sale_type = fields.Selection(
+        _point_of_sale_types_selection,
         'Point Of Sale Type',
         default='manual',
         required=True,
         )
     point_of_sale_number = fields.Integer(
         'Point Of Sale Number',
-        required=True,
         help='On Argentina Localization with use documents and sales journals '
         ' is mandatory'
         )
@@ -52,17 +60,23 @@ class AccountJournal(models.Model):
                 self.use_documents and
                 not self.sequence_id
                 ):
-            if self.point_of_sale_type == 'manual':
-                name = 'Manual'
-            elif self.point_of_sale_type == 'preprinted':
-                name = 'Preimpresa'
-            elif self.point_of_sale_type == 'online':
-                name = 'Online'
-            elif self.point_of_sale_type == 'electronic':
-                name = 'Electronica'
-            self.name = '%s %s %04d' % (
-                'Ventas', name, self.point_of_sale_number)
-            self.code = 'V%04d' % (self.point_of_sale_number)
+            (self.name, self.code) = self.get_name_and_code(
+                self.point_of_sale_type, self.point_of_sale_number)
+
+    @api.model
+    def get_name_and_code(self, point_of_sale_type, point_of_sale_number):
+        if point_of_sale_type == 'manual':
+            name = 'Manual'
+        elif point_of_sale_type == 'preprinted':
+            name = 'Preimpresa'
+        elif point_of_sale_type == 'online':
+            name = 'Online'
+        elif point_of_sale_type == 'electronic':
+            name = 'Electronica'
+        name = '%s %s %04d' % (
+            'Ventas', name, point_of_sale_number)
+        code = 'V%04d' % (point_of_sale_number)
+        return (name, code)
 
     @api.multi
     def get_journal_letter(self, counterpart_partner=False):
@@ -93,7 +107,7 @@ class AccountJournal(models.Model):
         return letters
 
     @api.multi
-    def _update_journal_docsument_types(self):
+    def _update_journal_document_types(self):
         """
         It creates, for journal of type:
             * sale: documents of internal types 'invoice', 'debit_note',
@@ -103,7 +117,7 @@ class AccountJournal(models.Model):
         self.ensure_one()
         if self.localization != 'argentina':
             return super(
-                AccountJournal, self)._update_journal_docsument_types()
+                AccountJournal, self)._update_journal_document_types()
 
         if not self.use_documents:
             return True
