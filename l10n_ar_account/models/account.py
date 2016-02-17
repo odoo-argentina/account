@@ -32,8 +32,8 @@ class AccountJournal(models.Model):
             ]
 
     _point_of_sale_types_selection = (
-            lambda self, *args, **kwargs: self._get_point_of_sale_types(
-                *args, **kwargs))
+        lambda self, *args, **kwargs: self._get_point_of_sale_types(
+            *args, **kwargs))
 
     point_of_sale_type = fields.Selection(
         _point_of_sale_types_selection,
@@ -151,7 +151,7 @@ class AccountJournal(models.Model):
 
         # take out documents that already exists
         document_types = document_types - self.mapped(
-                    'journal_document_type_ids.document_type_id')
+            'journal_document_type_ids.document_type_id')
 
         sequence = 10
         for document_type in document_types:
