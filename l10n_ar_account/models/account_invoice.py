@@ -138,7 +138,7 @@ class AccountInvoice(models.Model):
                 afip_concept = '2'
             if product_types.issubset(consumible):
                 afip_concept = '1'
-            if self.afip_document_class_id.afip_code in [19, 20, 21]:
+            if self.document_type_id.code in [19, 20, 21]:
                 # TODO verificar esto, como par expo no existe 3 y existe 4
                 # (otros), considermaos que un mixto seria el otros
                 if afip_concept == '3':
