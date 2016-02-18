@@ -6,7 +6,7 @@
 from openerp import fields, models
 
 
-class product_uom(models.Model):
+class ProductUom(models.Model):
     _inherit = 'product.uom'
 
     afip_code = fields.Char(

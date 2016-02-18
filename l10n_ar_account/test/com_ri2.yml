@@ -37,7 +37,7 @@
         start_date: 2011-09-01
         do_export: True
         remove_old_journals: True
-        responsability_id: !ref {model: afip.responsability, search: "[('name','=','IVA Responsable Inscripto')]"}
+        responsible_id: !ref {model: afip.responsible, search: "[('name','=','IVA Responsable Inscripto')]"}
 
 - Execute Wizard to create journals for responsable inscripto
 - !python {model: l10n_ar_invoice.config }: |

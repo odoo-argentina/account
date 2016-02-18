@@ -1,0 +1,18 @@
+-
+   Create this invoices with supplier number because if not we have an error in demo data load
+   Set the context for supplier bills because the 'type' field is readonly in invoice form views, so it value won't be considered by the yaml import
+-
+  !context
+    type: 'in_invoice'
+-
+  !record {model: account.invoice, id: demo_invoice_january_wages}:
+    company_id: base.main_company
+    partner_id: base.res_partner_12
+    type: 'in_invoice'
+    document_number: '0001-00000011'
+-
+  !record {model: account.invoice, id: demo_invoice_equipment_purchase}:
+    company_id: base.main_company
+    partner_id: base.res_partner_1
+    type: 'in_invoice'
+    document_number: '0003-00000023'

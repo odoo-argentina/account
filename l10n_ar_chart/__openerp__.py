@@ -1,31 +1,33 @@
 # -*- coding: utf-8 -*-
 {
-    'name': 'Argentina - Plan Contable General',
-    'author':   'OpenERP - Team de Localización Argentina',
+    'name': 'Argentina - Planes Contables',
+    'author': 'Moldeo Interactive,ADHOC SA',
     'category': 'Localization/Account Charts',
-    'website':  'https://launchpad.net/~openerp-l10n-ar-localization',
     'license': 'AGPL-3',
-    'description': """
-Plan contable genérico para la Argentina.
-
-Incluye:
-  - Wizard de configuración.
-  - Plantilla del plan contable genérico.
-
-""",
     'depends': [
         'l10n_multilang',
-        'l10n_ar_invoice',
-    ],
-    'demo': [
+        # for afip_code on fiscal position and other tax modifications
+        'l10n_ar_account',
+        # 'account',
     ],
     'test': [],
     'data': [
+        'data/account_chart_template.xml',
         'data/account_chart_respinsc.xml',
-        'data/account_chart_monotrib.xml',
-        # 'data/account_chart_coop.xml',
+        # 'data/account_tax_template.xml',
+        'data/account_fiscal_template.xml',
+        'data/account_chart_template.yml',
+        'data/menuitem.xml',
     ],
-    'installable': False,
+    'demo': [
+        # TODO analizar si necesitamos
+        'demo/l10n_ar_demo.yml',
+        '../account/demo/account_bank_statement.yml',
+        '../account/demo/account_invoice_demo.yml',
+    ],
+    'installable': True,
+    'images': [
+    ],
     'version': '9.0.0.0.0',
 }
 
