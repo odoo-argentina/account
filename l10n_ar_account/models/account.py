@@ -7,6 +7,16 @@ from openerp import fields, models, api, _
 from openerp.exceptions import UserError
 
 
+class AccountFiscalPositionTemplate(models.Model):
+    _inherit = 'account.fiscal.position.template'
+
+    afip_code = fields.Char(
+        'AFIP Code',
+        help='For eg. This code will be used on electronic invoice and citi '
+        'reports'
+        )
+
+
 class AccountFiscalPosition(models.Model):
     _inherit = 'account.fiscal.position'
 

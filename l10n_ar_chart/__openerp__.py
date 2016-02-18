@@ -20,7 +20,6 @@
         'data/menuitem.xml',
     ],
     'demo': [
-        # TODO analizar si necesitamos
         'demo/l10n_ar_demo.yml',
         '../account/demo/account_bank_statement.yml',
         '../account/demo/account_invoice_demo.yml',
