@@ -48,9 +48,6 @@
     'demo': [
         'demo/partner_demo.xml',
         'demo/company_demo.xml',
-        # 'demo/account_demo.xml',
-        # 'demo/ri_purchase_invoice_demo.xml',
-        # 'demo/ri_sale_invoice_demo.xml',
     ],
     'test': [
     ],
