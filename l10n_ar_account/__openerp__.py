@@ -5,7 +5,6 @@
     'category': 'Localization/Argentina',
     'sequence': 14,
     'author': 'ADHOC SA',
-    'website': 'www.adhoc.com.ar',
     'license': 'AGPL-3',
     'summary': '',
     'depends': [

@@ -3,8 +3,9 @@
 # For copyright and license notices, see __openerp__.py file in module root
 # directory
 ##############################################################################
-from openerp import models, fields, api
-# from openerp.exceptions import except_orm, Warning
+from openerp import models, fields, api, _
+from openerp.exceptions import Warning
+import re
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -28,15 +29,15 @@ class AccountInvoice(models.Model):
         readonly=True,
         copy=False,
         )
+    invoice_number = fields.Integer(
+        compute='_get_invoice_number',
+        string="Invoice Number",
+        )
+    point_of_sale_number = fields.Integer(
+        compute='_get_invoice_number',
+        string="Point Of Sale",
+        )
     # TODO chequear si los necesitamos
-    # invoice_number = fields.Integer(
-    #     compute='_get_invoice_number',
-    #     string=_("Invoice Number"),
-    #     )
-    # point_of_sale = fields.Integer(
-    #     compute='_get_invoice_number',
-    #     string=_("Point Of Sale"),
-    #     )
     # # no gravado en iva
     # vat_untaxed = fields.Float(
     #     compute="_get_taxes_and_prices",
@@ -113,6 +114,43 @@ class AccountInvoice(models.Model):
     afip_service_end = fields.Date(
         string='Service End Date'
         )
+
+    @api.one
+    @api.depends('document_number', 'number')
+    def _get_invoice_number(self):
+        """ Funcion que calcula numero de punto de venta y numero de factura
+        a partir del document number. Es utilizado principalmente por el modulo
+        de vat ledger citi
+        """
+        # TODO mejorar estp y almacenar punto de venta y numero de factura por
+        # separado, de hecho con esto hacer mas facil la carga de los
+        # comprobantes de compra
+        str_number = self.document_number or self.number or False
+        if str_number and self.state not in [
+                'draft', 'proforma', 'proforma2', 'cancel']:
+            if self.document_type_id.code in [33, 99, 331, 332]:
+                point_of_sale = '0'
+                # leave only numbers and convert to integer
+                invoice_number = str_number
+            # despachos de importacion
+            elif self.document_type_id.code == 66:
+                point_of_sale = '0'
+                invoice_number = '0'
+            elif "-" in str_number:
+                splited_number = str_number.split('-')
+                invoice_number = splited_number.pop()
+                point_of_sale = splited_number.pop()
+            elif "-" not in str_number and len(str_number) == 12:
+                point_of_sale = str_number[:4]
+                invoice_number = str_number[-8:]
+            else:
+                raise Warning(_(
+                    'Could not get invoice number and point of sale for '
+                    'invoice id %i') % (self.id))
+            self.invoice_number = int(
+                re.sub("[^0-9]", "", invoice_number))
+            self.point_of_sale_number = int(
+                re.sub("[^0-9]", "", point_of_sale))
 
     @api.one
     @api.depends(
