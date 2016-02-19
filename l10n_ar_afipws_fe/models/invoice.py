@@ -157,7 +157,7 @@ class AccountInvoice(models.Model):
             if inv.afip_cae and inv.afip_cae_due:
                 continue
 
-            afip_ws = self.journal_id.afip_ws
+            afip_ws = inv.journal_id.afip_ws
             # Ignore invoice if not ws on point of sale
             if not afip_ws:
                 continue
@@ -167,10 +167,10 @@ class AccountInvoice(models.Model):
             country = commercial_partner.country_id
             journal = inv.journal_id
             pos_number = journal.point_of_sale_number
-            doc_afip_code = self.document_type_id.code
+            doc_afip_code = inv.document_type_id.code
 
             # authenticate against AFIP:
-            ws = self.company_id.get_connection(afip_ws).connect()
+            ws = inv.company_id.get_connection(afip_ws).connect()
 
             # get the last invoice number registered in AFIP
             if afip_ws == "wsfe" or afip_ws == "wsmtxca":
@@ -230,33 +230,15 @@ class AccountInvoice(models.Model):
 
             # # invoice amount totals:
             imp_total = str("%.2f" % abs(inv.amount_total))
-            print 'imp_total', imp_total
-            imp_tot_conc = "0.00"
-            print 'imp_tot_conc', imp_tot_conc
-            # vat_base_amount excludes excempt vat taxes
+            # ImpTotConc es el iva no gravado
+            imp_tot_conc = str("%.2f" % abs(inv.vat_untaxed_base_amount))
             imp_neto = str("%.2f" % abs(inv.vat_base_amount))
-            print 'imp_neto', imp_neto
             imp_iva = str("%.2f" % abs(inv.vat_amount))
-            print 'imp_iva', imp_iva
             imp_subtotal = str("%.2f" % abs(inv.amount_untaxed))
-            print 'imp_subtotal', imp_subtotal
             imp_trib = str("%.2f" % abs(inv.other_taxes_amount))
-            print 'imp_trib', imp_trib
             imp_op_ex = str("%.2f" % abs(inv.vat_exempt_base_amount))
-            print 'imp_op_ex', imp_op_ex
             moneda_id = inv.currency_id.afip_code
             moneda_ctz = inv.currency_rate
-# imp_total 1474200.00
-# imp_tot_conc 0.00
-# imp_neto 1474200.00
-# imp_iva 0.00
-# imp_subtotal 1474200.00
-# imp_trib 0.00
-# imp_op_ex 1474200.00
-# El campo 'Importe Total' ImpTotal, debe ser igual a la suma de ImpTotConc + ImpNeto + ImpOpEx + ImpTrib + ImpIVA.
-# 10070: Si ImpNeto es mayor a 0 el objeto IVA es obligatorio.
-            # moneda_ctz = str(inv.company_id.currency_id.compute(
-            # 1., inv.currency_id))
 
             # # foreign trade data: export permit, country code, etc.:
             if inv.afip_incoterm_id:
@@ -293,6 +275,10 @@ class AccountInvoice(models.Model):
                     cuit_pais_cliente = country.cuit_juridica
                 else:
                     cuit_pais_cliente = country.cuit_fisica
+                if not cuit_pais_cliente:
+                    raise UserError(_(
+                        'No vat defined for the partner and also no CUIT set '
+                        'on country'))
 
             domicilio_cliente = " - ".join([
                                 commercial_partner.name or '',
@@ -336,15 +322,23 @@ class AccountInvoice(models.Model):
             # TODO ver si en realidad tenemos que usar un vat pero no lo
             # subimos
             if afip_ws != 'wsfex':
-                for vat in self.vat_tax_ids:
+                print 'inv'
+                print 'inv'
+                print 'inv', inv
+                print 'inv.vat_tax_ids', inv.vat_tax_ids
+                for vat in inv.vat_tax_ids:
                     _logger.info(
                         'Adding VAT %s' % vat.tax_id.tax_group_id.name)
+                    print 'vat.tax_id', vat.tax_id
+                    print 'vat.tax_id.tax_group_id.afip_code', vat.tax_id.tax_group_id.afip_code
+                    print 'vat.tax_id.tax_group_id.afip_code', vat.base_amount
+                    print 'vat.tax_id.tax_group_id.afip_code', vat.amount
                     ws.AgregarIva(
                         vat.tax_id.tax_group_id.afip_code,
                         "%.2f" % abs(vat.base_amount),
                         "%.2f" % abs(vat.amount),
                         )
-                for tax in self.not_vat_tax_ids:
+                for tax in inv.not_vat_tax_ids:
                     _logger.info(
                         'Adding TAX %s' % tax.tax_id.tax_group_id.name)
                     ws.AgregarTributo(
@@ -365,39 +359,40 @@ class AccountInvoice(models.Model):
             # analize line items - invoice detail
             # wsfe do not require detail
             if afip_ws != 'wsfe':
-                for line in inv.invoice_line:
+                for line in inv.invoice_line_ids:
                     codigo = line.product_id.code
                     # unidad de referencia del producto si se comercializa
                     # en una unidad distinta a la de consumo
-                    if not line.uos_id.afip_code:
+                    if not line.uom_id.afip_code:
                         raise UserError(_(
                             'Not afip code con producto UOM %s' % (
-                                line.uos_id.name)))
-                    cod_mtx = line.uos_id.afip_code
+                                line.uom_id.name)))
                     ds = line.name
                     qty = line.quantity
-                    umed = line.uos_id.afip_code
+                    umed = line.uom_id.afip_code
                     precio = line.price_unit
                     importe = line.price_subtotal
                     bonif = line.discount or None
                     if afip_ws == 'wsmtxca':
-                        if not line.product_id.uom_id.afip_code:
-                            raise UserError(_(
-                                'Not afip code con producto UOM %s' % (
-                                    line.product_id.uom_id.name)))
-                        u_mtx = (
-                            line.product_id.uom_id.afip_code or
-                            line.uos_id.afip_code)
-                        iva_id = line.vat_tax_ids.tax_id.tax_group_id.afip_code
-                        vat_taxes_amounts = line.vat_tax_ids.compute_all(
-                                    line.price_unit, line.quantity,
-                                    product=self.product_id,
-                                    partner=self.invoice_id.partner_id)
-                        imp_iva = vat_taxes_amounts[
-                            'total_included'] - vat_taxes_amounts['total']
-                        ws.AgregarItem(
-                            u_mtx, cod_mtx, codigo, ds, qty, umed,
-                            precio, bonif, iva_id, imp_iva, importe+imp_iva)
+                        raise UserError('Not implemented yet')
+                        # cod_mtx = line.uom_id.afip_code
+                        # if not line.product_id.uom_id.afip_code:
+                        #     raise UserError(_(
+                        #         'Not afip code con producto UOM %s' % (
+                        #             line.product_id.uom_id.name)))
+                        # u_mtx = (
+                        #     line.product_id.uom_id.afip_code or
+                        #     line.uom_id.afip_code)
+                        # iva_id = line.vat_tax_ids.tax_id.tax_group_id.afip_code
+                        # vat_taxes_amounts = line.vat_tax_ids.compute_all(
+                        #             line.price_unit, line.quantity,
+                        #             product=self.product_id,
+                        #             partner=self.invoice_id.partner_id)
+                        # imp_iva = vat_taxes_amounts[
+                        #     'total_included'] - vat_taxes_amounts['total']
+                        # ws.AgregarItem(
+                        #     u_mtx, cod_mtx, codigo, ds, qty, umed,
+                        #     precio, bonif, iva_id, imp_iva, importe+imp_iva)
                     elif afip_ws == 'wsfex':
                         ws.AgregarItem(
                             codigo, ds, qty, umed, precio, importe,

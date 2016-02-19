@@ -45,12 +45,14 @@ class AccountInvoice(models.Model):
         compute="_get_argentina_amounts",
         string='VAT Exempt Base Amount'
         )
+    # TODO borrar, no los necesitariamos mas porque modificamos compute all
+    # para que cree estos impuestos
     # base iva cero (tenemos que agregarlo porque odoo no crea las lineas para
     # impuestos con valor cero)
-    vat_zero_base_amount = fields.Monetary(
-        compute="_get_argentina_amounts",
-        string='VAT Zero Base Amount'
-        )
+    # vat_zero_base_amount = fields.Monetary(
+    #     compute="_get_argentina_amounts",
+    #     string='VAT Zero Base Amount'
+    #     )
     # no gravado en iva (tenemos que agregarlo porque odoo no crea las lineas
     # para impuestos con valor cero)
     vat_untaxed_base_amount = fields.Monetary(
@@ -111,60 +113,52 @@ class AccountInvoice(models.Model):
         """
         """
         # vat values
-        # we exclude exempt vats
-        # en realidad no haria falta porque en la v9 no se crean los impuestos
-        # si el impuesto da 0, por esto mismo debemos sumar al final el impueto
-        # no gravado
+        # we exclude exempt vats and untaxed (no gravados)
+        wihtout_tax_id = self.tax_line_ids.filtered(lambda r: not r.tax_id)
+        if wihtout_tax_id:
+            raise Warning(_(
+                "Some Invoice Tax Lines don't have a tax_id asociated, please "
+                "correct them or try to refresh invoice "))
+
         vat_taxes = self.tax_line_ids.filtered(
             lambda r: (
                 r.tax_id.tax_group_id.type == 'tax' and
                 r.tax_id.tax_group_id.tax == 'vat' and
-                r.tax_id.tax_group_id.afip_code != 2))
+                r.tax_id.tax_group_id.afip_code not in [1, 2]))
 
         vat_amount = sum(vat_taxes.mapped('amount'))
+        print 'self.tax_line_ids', self.tax_line_ids
+        for r in self.tax_line_ids:
+            print 'r', r
+            print r.tax_id
+            print r.tax_id.tax_group_id
+            print r.tax_id.tax_group_id.type
+            print r.tax_id.tax_group_id.tax
+            print r.tax_id.tax_group_id.afip_code
+        print 'vat_taxes', vat_taxes
         self.vat_tax_ids = vat_taxes
         self.vat_amount = vat_amount
-
-        # vat_zero_base_amount values
-        # exempt taxes are the ones with code 2
-        vat_zero_taxes = self.env['account.tax'].search([
-            ('tax_group_id.afip_code', '=', 1)])
-        invoice_lines = self.env['account.invoice.line'].search([
-            ('invoice_id', '=', self.id),
-            ('invoice_line_tax_ids', 'in', vat_zero_taxes.ids),
-            ])
-        self.vat_zero_base_amount = sum(
-            invoice_lines.mapped('price_subtotal'))
+        self.vat_base_amount = sum(vat_taxes.mapped('base_amount'))
 
         # vat exempt values
         # exempt taxes are the ones with code 2
-        vat_exempt_taxes = self.env['account.tax'].search([
-            ('tax_group_id.afip_code', '=', 2)])
-        invoice_lines = self.env['account.invoice.line'].search([
-            ('invoice_id', '=', self.id),
-            ('invoice_line_tax_ids', 'in', vat_exempt_taxes.ids),
-            ])
+        vat_exempt_taxes = self.tax_line_ids.filtered(
+            lambda r: (
+                r.tax_id.tax_group_id.type == 'tax' and
+                r.tax_id.tax_group_id.tax == 'vat' and
+                r.tax_id.tax_group_id.afip_code == 2))
         self.vat_exempt_base_amount = sum(
-            invoice_lines.mapped('price_subtotal'))
+            vat_exempt_taxes.mapped('base_amount'))
 
-        # vat_untaxed_base_amount values
-        # exempt taxes are the ones with code 2
-        vat_untaxed_taxes = self.env['account.tax'].search([
-            ('tax_group_id.afip_code', '=', 3)])
-        invoice_lines = self.env['account.invoice.line'].search([
-            ('invoice_id', '=', self.id),
-            ('invoice_line_tax_ids', 'in', vat_untaxed_taxes.ids),
-            ])
+        # vat_untaxed_base_amount values (no gravado)
+        # vat exempt taxes are the ones with code 1
+        vat_untaxed_taxes = self.tax_line_ids.filtered(
+            lambda r: (
+                r.tax_id.tax_group_id.type == 'tax' and
+                r.tax_id.tax_group_id.tax == 'vat' and
+                r.tax_id.tax_group_id.afip_code == 1))
         self.vat_untaxed_base_amount = sum(
-            invoice_lines.mapped('price_subtotal'))
-
-        # la base del iva se considera para aquellos que tengan iva != a exento
-        # en nuestor caso todos los que tienen valor mas alicuota 0 y
-        # no gravado
-        self.vat_base_amount = (
-            sum(vat_taxes.mapped('base_amount')) +
-            self.vat_untaxed_base_amount +
-            self.vat_zero_base_amount)
+            vat_untaxed_taxes.mapped('base_amount'))
 
         # other taxes values
         not_vat_taxes = self.tax_line_ids - vat_taxes
