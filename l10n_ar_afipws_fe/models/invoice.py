@@ -3,7 +3,7 @@
 # For copyright and license notices, see __openerp__.py file in module root
 # directory
 ##############################################################################
-from pyi25 import PyI25
+from .pyi25 import PyI25
 from openerp import fields, models, api, _
 from openerp.exceptions import UserError
 from cStringIO import StringIO as StringIO
@@ -86,7 +86,7 @@ class AccountInvoice(models.Model):
             barcode = barcode + self.verification_digit_modulo10(barcode)
         self.afip_barcode = barcode
 
-        "Generate the required barcode Interleaved of 7 image using PIL"
+        # Generate the required barcode Interleaved of 7 image using PIL
         image = False
         if barcode:
             # create the helper:
@@ -281,12 +281,12 @@ class AccountInvoice(models.Model):
                         'on country'))
 
             domicilio_cliente = " - ".join([
-                                commercial_partner.name or '',
-                                commercial_partner.street or '',
-                                commercial_partner.street2 or '',
-                                commercial_partner.zip or '',
-                                commercial_partner.city or '',
-                                ])
+                commercial_partner.name or '',
+                commercial_partner.street or '',
+                commercial_partner.street2 or '',
+                commercial_partner.zip or '',
+                commercial_partner.city or '',
+                ])
             pais_dst_cmp = commercial_partner.country_id.afip_code
 
             # create the invoice internally in the helper

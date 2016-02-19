@@ -36,14 +36,6 @@ class AccountDocumentLetter(models.Model):
     taxes_included = fields.Boolean(
         'Taxes Included?'
         )
-    # included_tax_group_ids = fields.Many2many(
-    #     'account.tax.group',
-    #     'account_document_letter_tax_group_rel',
-    #     'document_letter_id', 'tax_group_id',
-    #     'Included Tax Groups',
-    #     help='For documents of this letter, include this taxes of this group '
-    #     'on invoices amounts'
-    #     )
     # taxes_discriminated = fields.Boolean(
     #     'Taxes Discriminated on Invoices?',
     #     help="If True, the taxes will be discriminated on invoice report.")

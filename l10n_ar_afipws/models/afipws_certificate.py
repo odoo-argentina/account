@@ -36,10 +36,10 @@ class AfipwsCertificate(models.Model):
         help='Certificate in PEM format.'
         )
     state = fields.Selection([
-            ('draft', 'Draft'),
-            ('waiting', 'Waiting'),
-            ('confirmed', 'Confirmed'),
-            ('cancel', 'Cancelled'),
+        ('draft', 'Draft'),
+        ('waiting', 'Waiting'),
+        ('confirmed', 'Confirmed'),
+        ('cancel', 'Cancelled'),
         ],
         'State',
         select=True,
@@ -54,17 +54,17 @@ class AfipwsCertificate(models.Model):
         "cant use this key again."
         )
     request_file = fields.Binary(
-        _('Download Signed Certificate Request'),
+        'Download Signed Certificate Request',
         compute='get_request_file',
         readonly=True
         )
     request_filename = fields.Char(
-        _('Filename'),
+        'Filename',
         readonly=True,
         compute='get_request_file',
         )
     display_name = fields.Char(
-        string=_('Name'),
+        string='Name',
         compute='_compute_display_name',
         )
 

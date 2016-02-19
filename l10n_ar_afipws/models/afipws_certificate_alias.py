@@ -101,9 +101,9 @@ class AfipwsCertificateAlias(models.Model):
         states={'draft': [('readonly', False)]},
         )
     state = fields.Selection([
-            ('draft', 'Draft'),
-            ('confirmed', 'Confirmed'),
-            ('cancel', 'Cancelled'),
+        ('draft', 'Draft'),
+        ('confirmed', 'Confirmed'),
+        ('cancel', 'Cancelled'),
         ], 'State', select=True, readonly=True, default='draft',
         help="* The 'Draft' state is used when a user is creating a new pair "
         "key. Warning: everybody can see the key."

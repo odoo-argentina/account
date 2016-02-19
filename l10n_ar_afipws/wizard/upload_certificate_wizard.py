@@ -7,7 +7,7 @@ from openerp import fields, api, models
 import base64
 
 
-class l10n_ar_afipws_upload_certificate(models.TransientModel):
+class L10nArAfipwsUploadCertificate(models.TransientModel):
     _name = 'afipws.upload_certificate.wizard'
 
     @api.model

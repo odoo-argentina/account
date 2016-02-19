@@ -10,7 +10,7 @@ import logging
 _logger = logging.getLogger(__name__)
 
 
-class product_uom(models.Model):
+class ProductUom(models.Model):
     _inherit = "product.uom"
 
     @api.multi

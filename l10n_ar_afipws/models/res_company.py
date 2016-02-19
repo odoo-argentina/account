@@ -69,7 +69,7 @@ class ResCompany(models.Model):
         * en el conf del server de odoo
         * en registros de esta misma clase
         """
-        self.ensure_one
+        self.ensure_one()
         pkey = False
         cert = False
         msg = False

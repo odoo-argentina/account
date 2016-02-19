@@ -25,7 +25,8 @@ class ResCurrency(models.Model):
                 [('use_argentinian_localization', '=', True)],
                 limit=1)
         if not company:
-            raise UserError(_('No company found using argentinian localization'))
+            raise UserError(_(
+                'No company found using argentinian localization'))
 
         ws = company.get_connection(afip_ws).connect()
 

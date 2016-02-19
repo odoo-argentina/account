@@ -172,4 +172,4 @@ class AccountJournal(models.Model):
         raise UserError(currency.get_pyafipws_currency_rate(
             afip_ws=self.afip_ws,
             company=self.company_id,
-                )[1])
+            )[1])

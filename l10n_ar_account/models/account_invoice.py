@@ -232,7 +232,7 @@ class AccountInvoice(models.Model):
         if self.localization == 'argentina':
             commercial_partner = self.partner_id.commercial_partner_id
             currency_rate = self.currency_id.compute(
-                    1., self.company_id.currency_id)
+                1., self.company_id.currency_id)
             return {
                 'afip_responsible_type_id': (
                     commercial_partner.afip_responsible_type_id.id),

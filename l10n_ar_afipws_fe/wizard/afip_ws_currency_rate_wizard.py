@@ -7,7 +7,7 @@ from openerp import models, fields, api, _
 from openerp.exceptions import UserError
 
 
-class afip_ws_currency_rate_wizard(models.TransientModel):
+class AfipWsCurrencyRateWizard(models.TransientModel):
     _name = 'afip.ws.currency_rate.wizard'
     _description = 'AFIP WS Currency Rate Wizard'
 
