@@ -4,7 +4,7 @@
 # directory
 ##############################################################################
 from openerp import models, fields, api, _
-from openerp.exceptions import Warning
+from openerp.exceptions import UserError
 import re
 import logging
 _logger = logging.getLogger(__name__)
@@ -116,7 +116,7 @@ class AccountInvoice(models.Model):
         # we exclude exempt vats and untaxed (no gravados)
         wihtout_tax_id = self.tax_line_ids.filtered(lambda r: not r.tax_id)
         if wihtout_tax_id:
-            raise Warning(_(
+            raise UserError(_(
                 "Some Invoice Tax Lines don't have a tax_id asociated, please "
                 "correct them or try to refresh invoice "))
 
@@ -127,15 +127,6 @@ class AccountInvoice(models.Model):
                 r.tax_id.tax_group_id.afip_code not in [1, 2]))
 
         vat_amount = sum(vat_taxes.mapped('amount'))
-        print 'self.tax_line_ids', self.tax_line_ids
-        for r in self.tax_line_ids:
-            print 'r', r
-            print r.tax_id
-            print r.tax_id.tax_group_id
-            print r.tax_id.tax_group_id.type
-            print r.tax_id.tax_group_id.tax
-            print r.tax_id.tax_group_id.afip_code
-        print 'vat_taxes', vat_taxes
         self.vat_tax_ids = vat_taxes
         self.vat_amount = vat_amount
         self.vat_base_amount = sum(vat_taxes.mapped('base_amount'))
@@ -195,7 +186,7 @@ class AccountInvoice(models.Model):
                 point_of_sale = str_number[:4]
                 invoice_number = str_number[-8:]
             else:
-                raise Warning(_(
+                raise UserError(_(
                     'Could not get invoice number and point of sale for '
                     'invoice id %i') % (self.id))
             self.invoice_number = int(

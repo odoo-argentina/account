@@ -4,7 +4,7 @@
 # directory
 ##############################################################################
 from openerp import models, fields, api, _
-from openerp.exceptions import Warning
+from openerp.exceptions import UserError
 
 
 class afip_ws_currency_rate_wizard(models.TransientModel):
@@ -22,7 +22,7 @@ class afip_ws_currency_rate_wizard(models.TransientModel):
         self.ensure_one()
         journal_id = self._context.get('active_id', False)
         if not journal_id:
-            raise Warning(_(
+            raise UserError(_(
                 'No Journal Id as active_id on context'))
         journal = self.env[
             'account.journal'].browse(journal_id)

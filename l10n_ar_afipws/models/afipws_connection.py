@@ -4,7 +4,7 @@
 # directory
 ##############################################################################
 from openerp import fields, models, api, _
-from openerp.exceptions import Warning
+from openerp.exceptions import UserError
 import logging
 
 _logger = logging.getLogger(__name__)
@@ -73,7 +73,7 @@ class AfipwsConnection(models.Model):
 
         afip_ws_url = self.get_afip_ws_url(self.afip_ws, self.type)
         if self.afip_ws and not afip_ws_url:
-            raise Warning(_('Webservice %s not supported') % self.afip_ws)
+            raise UserError(_('Webservice %s not supported') % self.afip_ws)
         self.afip_ws_url = afip_ws_url
 
     @api.model
@@ -100,7 +100,7 @@ class AfipwsConnection(models.Model):
         # TODO tal vez cambiar nombre cuando veamos si devuelve otra cosa
         self.ensure_one()
         if self.afip_ws != afip_ws:
-            raise Warning(_(
+            raise UserError(_(
                 'This method is for %s connections and you call it from an'
                 ' %s connection') % (
                 afip_ws, self.afip_ws))
@@ -116,7 +116,7 @@ class AfipwsConnection(models.Model):
             'connection id %s' % (self.afip_ws, self.id))
         ws = self._get_ws(self.afip_ws)
         if not ws:
-            raise Warning(_('AFIP Webservice %s not implemented yet' % (
+            raise UserError(_('AFIP Webservice %s not implemented yet' % (
                 self.afip_ws)))
         # TODO implementar cache y proxy
         # create the proxy and get the configuration system parameters:
@@ -129,7 +129,7 @@ class AfipwsConnection(models.Model):
         # TODO check document type is cuit
         document_value = self.company_id.partner_id.document_value
         if not document_value:
-            raise Warning(_(
+            raise UserError(_(
                 'No se definió CUIT al partner de la compañia %s') % (
                 self.company_id.name))
         ws.Cuit = self.company_id.partner_id.document_value

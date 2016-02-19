@@ -322,17 +322,9 @@ class AccountInvoice(models.Model):
             # TODO ver si en realidad tenemos que usar un vat pero no lo
             # subimos
             if afip_ws != 'wsfex':
-                print 'inv'
-                print 'inv'
-                print 'inv', inv
-                print 'inv.vat_tax_ids', inv.vat_tax_ids
                 for vat in inv.vat_tax_ids:
                     _logger.info(
                         'Adding VAT %s' % vat.tax_id.tax_group_id.name)
-                    print 'vat.tax_id', vat.tax_id
-                    print 'vat.tax_id.tax_group_id.afip_code', vat.tax_id.tax_group_id.afip_code
-                    print 'vat.tax_id.tax_group_id.afip_code', vat.base_amount
-                    print 'vat.tax_id.tax_group_id.afip_code', vat.amount
                     ws.AgregarIva(
                         vat.tax_id.tax_group_id.afip_code,
                         "%.2f" % abs(vat.base_amount),

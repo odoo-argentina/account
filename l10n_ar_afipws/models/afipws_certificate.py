@@ -3,7 +3,7 @@
 # For copyright and license notices, see __openerp__.py file in module root
 # directory
 ##############################################################################
-from openerp.exceptions import Warning
+from openerp.exceptions import UserError
 from openerp import fields, models, api, _
 from OpenSSL import crypto
 import base64
@@ -122,7 +122,7 @@ class AfipwsCertificate(models.Model):
                 'you forgot the header CERTIFICATE or forgot/append end of '
                 'lines.')
         if msg:
-            raise Warning(msg)
+            raise UserError(msg)
         return True
 
     @api.multi
@@ -137,11 +137,11 @@ class AfipwsCertificate(models.Model):
                     crypto.FILETYPE_PEM, self.crt.encode('ascii'))
             except Exception, e:
                 if 'Expecting: CERTIFICATE' in e[0]:
-                    raise Warning(_(
+                    raise UserError(_(
                         'Wrong Certificate file format.\nBe sure you have '
                         'BEGIN CERTIFICATE string in your first line.'))
                 else:
-                    raise Warning(_(
+                    raise UserError(_(
                         'Unknown error.\nX509 return this message:\n %s') % (
                         e[0]))
         else:

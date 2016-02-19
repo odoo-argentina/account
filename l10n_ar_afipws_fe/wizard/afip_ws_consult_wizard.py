@@ -4,7 +4,7 @@
 # directory
 ##############################################################################
 from openerp import models, fields, api, _
-from openerp.exceptions import Warning
+from openerp.exceptions import UserError
 
 
 class AfipWsConsultWizard(models.TransientModel):
@@ -21,7 +21,7 @@ class AfipWsConsultWizard(models.TransientModel):
         self.ensure_one()
         journal_document_type_id = self._context.get('active_id', False)
         if not journal_document_type_id:
-            raise Warning(_(
+            raise UserError(_(
                 'No Journal Document Class as active_id on context'))
         journal_document_type = self.env[
             'account.journal.document.type'].browse(

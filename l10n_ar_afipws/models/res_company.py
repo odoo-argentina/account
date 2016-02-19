@@ -5,7 +5,7 @@
 ##############################################################################
 from openerp import fields, models, api, _
 import logging
-from openerp.exceptions import Warning
+from openerp.exceptions import UserError
 import openerp.tools as tools
 import os
 import hashlib
@@ -109,7 +109,7 @@ class ResCompany(models.Model):
                 else:
                     _logger.info('Using odoo conf certificates')
         if not pkey or not cert:
-            raise Warning(msg)
+            raise UserError(msg)
         return (pkey, cert)
 
     @api.multi
@@ -219,7 +219,7 @@ class ResCompany(models.Model):
                 # avoid encoding problem when reporting exceptions to the user:
                 err_msg = traceback.format_exception_only(
                     sys.exc_type, sys.exc_value)[0]
-            raise Warning(_(
+            raise UserError(_(
                 'Could not connect. This is the what we received: %s') % (
                     err_msg))
         return {
