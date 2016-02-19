@@ -71,9 +71,9 @@ class AccountInvoice(models.Model):
         help="AFIP request result"
         )
     validation_type = fields.Char(
-         'Validation Type',
-         compute='get_validation_type',
-         )
+        'Validation Type',
+        compute='get_validation_type',
+        )
 
     @api.one
     def get_validation_type(self):
