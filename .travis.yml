@@ -74,6 +74,7 @@ install:
   - git clone --depth=1 https://github.com/OCA/maintainer-quality-tools.git ${HOME}/maintainer-quality-tools
   # repository requirements
   - pip install -r requirements.txt
+  - pip install -r requirements2.txt
   - export PATH=${HOME}/maintainer-quality-tools/travis:${PATH}
   - travis_install_nightly
 
