@@ -7,26 +7,6 @@ from openerp import fields, models, api, _
 from openerp.exceptions import UserError
 
 
-class AccountFiscalPositionTemplate(models.Model):
-    _inherit = 'account.fiscal.position.template'
-
-    afip_code = fields.Char(
-        'AFIP Code',
-        help='For eg. This code will be used on electronic invoice and citi '
-        'reports'
-        )
-
-
-class AccountFiscalPosition(models.Model):
-    _inherit = 'account.fiscal.position'
-
-    afip_code = fields.Char(
-        'AFIP Code',
-        help='For eg. This code will be used on electronic invoice and citi '
-        'reports'
-        )
-
-
 class AccountJournal(models.Model):
     _inherit = "account.journal"
 
@@ -56,6 +36,11 @@ class AccountJournal(models.Model):
         help='On Argentina Localization with use documents and sales journals '
         ' is mandatory'
         )
+
+    _sql_constraints = [(
+        'point_of_sale_number_unique',
+        'unique(point_of_sale_number, company_id, type)',
+        'Point Of Sale Number must be unique per Company!')]
 
     @api.onchange(
         'type', 'localization', 'use_documents', 'point_of_sale_number',

@@ -5,7 +5,6 @@
     'category': 'Localization/Argentina',
     'sequence': 14,
     'author': 'ADHOC SA',
-    'website': 'www.adhoc.com.ar',
     'license': 'AGPL-3',
     'summary': '',
     'depends': [
@@ -15,15 +14,16 @@
     'external_dependencies': {
     },
     'data': [
-        'data/account_tax_group_data.xml',
         'data/afip_responsible_type.xml',
         'data/account_document_letter.xml',
         'data/account.document.type.csv',
         'data/afip_incoterm.xml',
         'data/res_country_afip_code.xml',
+        'data/res_country_cuit.xml',
         'data/product_uom.xml',
         'data/res_currency.xml',
         'data/res_partner.xml',
+        'data/account_tax_group.xml',
         # TODO analizar y migrar
         # 'data/account_financial_report_data.xml',
         # 'data/account_payment_term.xml',

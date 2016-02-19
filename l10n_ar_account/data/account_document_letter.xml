@@ -10,13 +10,15 @@
             <field name='name'>B</field>
             <field name='issuer_ids' eval="[(6, 0, [ref('res_IVARI'), ref('res_IVARIFM')])]"/>
             <field name='receptor_ids' eval="[(6, 0, [ref('res_CF'), ref('res_RM'), ref('res_IVANR'), ref('res_IVAE')])]"/>
-            <field name='included_tax_group_ids' eval="[(6, 0, [ref('tax_group_vat_taxes'), ref('account.tax_group_taxes')])]"/>
+            <field name="taxes_included" eval="True"/>
+            <!-- <field name='included_tax_group_ids' eval="[(6, 0, [ref('tax_group_vat_taxes'), ref('account.tax_group_taxes')])]"/> -->
         </record>
         <record model='account.document.letter' id='dl_c'>
             <field name='name'>C</field>
             <field name='issuer_ids' eval="[(6, 0, [ref('res_IVANR'), ref('res_RM'), ref('res_IVARNI'), ref('res_IVAE')])]"/>
             <field name='receptor_ids' eval="[(6, 0, [ref('res_RM'), ref('res_IVARI'), ref('res_IVARNI'), ref('res_IVANR'), ref('res_CF'), ref('res_IVAE')])]"/>
-            <field name='included_tax_group_ids' eval="[(6, 0, [ref('tax_group_vat_taxes'), ref('account.tax_group_taxes')])]"/>
+            <field name="taxes_included" eval="True"/>
+            <!-- <field name='included_tax_group_ids' eval="[(6, 0, [ref('tax_group_vat_taxes'), ref('account.tax_group_taxes')])]"/> -->
         </record>
         <record model='account.document.letter' id='dl_m'>
             <field name='name'>M</field>
@@ -27,12 +29,14 @@
             <field name='name'>E</field>
             <field name='issuer_ids' eval="[(6, 0, [ref('res_IVARI'), ref('res_RM')])]"/>
             <field name='receptor_ids' eval="[(6, 0, [ref('res_CLI_EXT'), ref('res_EXT'), ref('res_IVARI')])]"/>
-            <field name='included_tax_group_ids' eval="[(6, 0, [ref('tax_group_vat_taxes'), ref('account.tax_group_taxes')])]"/>
+            <field name="taxes_included" eval="True"/>
+            <!-- <field name='included_tax_group_ids' eval="[(6, 0, [ref('tax_group_vat_taxes'), ref('account.tax_group_taxes')])]"/> -->
         </record>
         <record model='account.document.letter' id='dl_x'>
             <field name='name'>X</field>
             <field name='issuer_ids' eval="[(6, 0, [ref('res_IVARI'), ref('res_IVANR'), ref('res_RM'), ref('res_IVARNI'), ref('res_IVAE')])]"/>
             <field name='receptor_ids' eval="[(6, 0, [ref('res_IVARI'), ref('res_IVANR'), ref('res_RM'), ref('res_IVARNI'), ref('res_IVAE')])]"/>
+            <field name="taxes_included" eval="True"/>
         </record>
     </data>
 </openerp>

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from openerp import fields, models
-# from openerp.exceptions import Warning
+# from openerp.exceptions import UserError
 
 
 class AfipResponsibleType(models.Model):

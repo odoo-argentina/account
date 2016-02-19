@@ -11,6 +11,7 @@
             <field eval="0.0" name="amount"/>
             <field name="account_id" ref="ri_iva_debito_fiscal"/>
             <field name="refund_account_id" ref="ri_iva_credito_fiscal"/>
+            <field name="tax_group_id" ref="l10n_ar_account.ri_tax_group_iva_no_gravado"/>
             <field name="type_tax_use">sale</field>
         </record>
 
@@ -23,6 +24,7 @@
             <field eval="0.0" name="amount"/>
             <field name="account_id" ref="ri_iva_credito_fiscal"/>
             <field name="refund_account_id" ref="ri_iva_debito_fiscal"/>
+            <field name="tax_group_id" ref="l10n_ar_account.ri_tax_group_iva_no_gravado"/>
             <field name="type_tax_use">purchase</field>
         </record>
 
@@ -35,6 +37,7 @@
             <field eval="0.0" name="amount"/>
             <field name="account_id" ref="ri_iva_debito_fiscal"/>
             <field name="refund_account_id" ref="ri_iva_credito_fiscal"/>
+            <field name="tax_group_id" ref="l10n_ar_account.ri_tax_group_iva_exento"/>
             <field name="type_tax_use">sale</field>
         </record>
 
@@ -47,6 +50,7 @@
             <field eval="0.0" name="amount"/>     
             <field name="account_id" ref="ri_iva_credito_fiscal"/>
             <field name="refund_account_id" ref="ri_iva_debito_fiscal"/>
+            <field name="tax_group_id" ref="l10n_ar_account.ri_tax_group_iva_exento"/>
             <field name="type_tax_use">purchase</field>
         </record>
 
@@ -59,6 +63,7 @@
             <field name="amount_type">percent</field>
             <field name="account_id" ref="ri_iva_debito_fiscal"/>
             <field name="refund_account_id" ref="ri_iva_credito_fiscal"/>
+            <field name="tax_group_id" ref="l10n_ar_account.ri_tax_group_iva_0"/>
             <field name="type_tax_use">sale</field>
         </record>
 
@@ -71,6 +76,7 @@
             <field name="amount_type">percent</field>
             <field name="account_id" ref="ri_iva_credito_fiscal"/>
             <field name="refund_account_id" ref="ri_iva_debito_fiscal"/>
+            <field name="tax_group_id" ref="l10n_ar_account.ri_tax_group_iva_0"/>
             <field name="type_tax_use">purchase</field>
         </record>
 
@@ -79,10 +85,11 @@
             <field name="description">IVA 10.5%</field>
             <field name="name">IVA Ventas 10.5%</field>
             <field name="sequence">2</field>
-            <field eval="0.105" name="amount"/>
+            <field eval="10.5" name="amount"/>
             <field name="amount_type">percent</field>
             <field name="account_id" ref="ri_iva_debito_fiscal"/>
             <field name="refund_account_id" ref="ri_iva_credito_fiscal"/>
+            <field name="tax_group_id" ref="l10n_ar_account.ri_tax_group_iva_10"/>
             <field name="type_tax_use">sale</field>
         </record>
 
@@ -91,10 +98,11 @@
             <field name="description">IVA 10.5%</field>
             <field name="name">IVA Compras 10.5%</field>
             <field name="sequence">2</field>
-            <field eval="0.105" name="amount"/>
+            <field eval="10.5" name="amount"/>
             <field name="amount_type">percent</field>
             <field name="account_id" ref="ri_iva_credito_fiscal"/>
             <field name="refund_account_id" ref="ri_iva_debito_fiscal"/>
+            <field name="tax_group_id" ref="l10n_ar_account.ri_tax_group_iva_10"/>
             <field name="type_tax_use">purchase</field>
         </record>
 
@@ -103,10 +111,11 @@
             <field name="name">IVA Ventas 21%</field>
             <field name="description">IVA 21%</field>
             <field name="sequence">1</field>
-            <field eval="0.21" name="amount"/>
+            <field eval="21" name="amount"/>
             <field name="amount_type">percent</field>
             <field name="account_id" ref="ri_iva_debito_fiscal"/>
             <field name="refund_account_id" ref="ri_iva_credito_fiscal"/>
+            <field name="tax_group_id" ref="l10n_ar_account.ri_tax_group_iva_21"/>
             <field name="type_tax_use">sale</field>
         </record>
 
@@ -115,10 +124,11 @@
             <field name="name">IVA Compras 21%</field>
             <field name="description">IVA 21%</field>
             <field name="sequence">1</field>
-            <field eval="0.21" name="amount"/>
+            <field eval="21" name="amount"/>
             <field name="amount_type">percent</field>
             <field name="account_id" ref="ri_iva_credito_fiscal"/>
             <field name="refund_account_id" ref="ri_iva_debito_fiscal"/>
+            <field name="tax_group_id" ref="l10n_ar_account.ri_tax_group_iva_21"/>
             <field name="type_tax_use">purchase</field>
         </record>
 
@@ -127,10 +137,11 @@
             <field name="name">IVA Ventas 27%</field>
             <field name="description">IVA 27%</field>
             <field name="sequence">3</field>
-            <field eval="0.27" name="amount"/>
+            <field eval="27" name="amount"/>
             <field name="amount_type">percent</field>
             <field name="account_id" ref="ri_iva_debito_fiscal"/>
             <field name="refund_account_id" ref="ri_iva_credito_fiscal"/>
+            <field name="tax_group_id" ref="l10n_ar_account.ri_tax_group_iva_27"/>
             <field name="type_tax_use">sale</field>
         </record>
 
@@ -139,10 +150,11 @@
             <field name="name">IVA Compras 27%</field>
             <field name="description">IVA 27%</field>
             <field name="sequence">3</field>
-            <field eval="0.27" name="amount"/>
+            <field eval="27" name="amount"/>
             <field name="amount_type">percent</field>
             <field name="account_id" ref="ri_iva_credito_fiscal"/>
             <field name="refund_account_id" ref="ri_iva_debito_fiscal"/>
+            <field name="tax_group_id" ref="l10n_ar_account.ri_tax_group_iva_27"/>
             <field name="type_tax_use">purchase</field>
         </record>
 

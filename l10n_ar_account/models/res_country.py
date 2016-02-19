@@ -10,7 +10,19 @@ class ResCountry(models.Model):
     _inherit = 'res.country'
 
     afip_code = fields.Char(
-        'Afip Code', size=3
+        'Afip Code',
+        size=3,
         )
-
+    cuit_fisica = fields.Char(
+        'CUIT persona fisica',
+        size=11,
+        )
+    cuit_juridica = fields.Char(
+        'CUIT persona juridica',
+        size=11,
+        )
+    cuit_otro = fields.Char(
+        'CUIT otro',
+        size=11,
+        )
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
