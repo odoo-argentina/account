@@ -3,7 +3,7 @@
 # For copyright and license notices, see __openerp__.py file in module root
 # directory
 ##############################################################################
-from openerp import fields, models, api, _
+from openerp import fields, models, api
 from OpenSSL import crypto
 import logging
 _logger = logging.getLogger(__name__)
