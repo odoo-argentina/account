@@ -12,14 +12,34 @@ _logger = logging.getLogger(__name__)
 class AccountJournal(models.Model):
     _inherit = 'account.journal'
 
-    afip_ws = fields.Selection([
-        ('wsfe', 'Mercado interno -sin detalle- RG2485 (WSFEv1)'),
-        ('wsmtxca', 'Mercado interno -con detalle- RG2904 (WSMTXCA)'),
-        ('wsfex', 'Exportación -con detalle- RG2758 (WSFEXv1)'),
-        ('wsbfe', 'Bono Fiscal -con detalle- RG2557 (WSMTXCA)'),
-        ],
+    _afip_ws_selection = (
+        lambda self, *args, **kwargs: self._get_afip_ws_selection(
+            *args, **kwargs))
+
+    @api.model
+    def _get_afip_ws_selection(self):
+        return [
+            ('wsfe', 'Mercado interno -sin detalle- RG2485 (WSFEv1)'),
+            ('wsmtxca', 'Mercado interno -con detalle- RG2904 (WSMTXCA)'),
+            ('wsfex', 'Exportación -con detalle- RG2758 (WSFEXv1)'),
+            ('wsbfe', 'Bono Fiscal -con detalle- RG2557 (WSMTXCA)'),
+            ]
+
+    afip_ws = fields.Selection(
+        _afip_ws_selection,
         'AFIP WS',
         )
+
+    @api.model
+    def create(self, vals):
+        journal = super(AccountJournal, self).create(vals)
+        if journal.point_of_sale_type == 'electronic' and journal.afip_ws:
+            try:
+                journal.sync_document_local_remote_number()
+            except:
+                _logger.info(
+                    'Could not sincronize local and remote numbers')
+        return journal
 
     @api.model
     def _get_point_of_sale_types(self):

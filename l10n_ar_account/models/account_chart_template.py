@@ -3,9 +3,25 @@
 # For copyright and license notices, see __openerp__.py file in module root
 # directory
 ##############################################################################
-from openerp import models, api
+from openerp import models, api, fields
 import logging
 _logger = logging.getLogger(__name__)
+
+
+class AccountTaxTemplate(models.Model):
+    _inherit = 'account.tax.template'
+
+    # TODO perhups we should use tags instead of groups
+    tax_group_id = fields.Many2one(
+        'account.tax.group',
+        string="Tax Group",
+        )
+
+    def _get_tax_vals(self, company):
+        vals = super(AccountTaxTemplate, self)._get_tax_vals(company)
+        if self.tax_group_id:
+            vals['tax_group_id'] = self.tax_group_id.id
+        return vals
 
 
 class AccountChartTemplate(models.Model):
@@ -49,6 +65,9 @@ class AccountChartTemplate(models.Model):
                 'point_of_sale_type', 'manual')
             point_of_sale_number = self._context.get(
                 'point_of_sale_number', 1)
+            # for compatibility with afip_ws
+            afip_ws = self._context.get(
+                'afip_ws', False)
             for vals_journal in journal_data:
                 # for sale journals we use get_name_and_code function
                 if vals_journal['type'] == 'sale':
@@ -56,6 +75,8 @@ class AccountChartTemplate(models.Model):
                         point_of_sale_type, point_of_sale_number)
                     vals_journal['name'] = name
                     vals_journal['code'] = code
+                    if afip_ws:
+                        vals_journal['afip_ws'] = afip_ws
                 if vals_journal['type'] in [
                         'sale', 'purchase']:
                     vals_journal['point_of_sale_number'] = point_of_sale_number

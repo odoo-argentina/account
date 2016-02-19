@@ -12,6 +12,7 @@ _logger = logging.getLogger(__name__)
 class AfipwsConnection(models.Model):
     _inherit = "afipws.connection"
 
+    # TODO use _get_afip_ws_selection to add values to this selection
     afip_ws = fields.Selection(
         selection_add=[
             ('wsfe', 'Mercado interno -sin detalle- RG2485 (WSFEv1)'),

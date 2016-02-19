@@ -17,7 +17,7 @@ class AccountInvoice(models.Model):
         string='Currency Rate',
         copy=False,
         digits=(16, 4),
-        # TODO make it editable, we hace to change move create method
+        # TODO make it editable, we have to change move create method
         readonly=True,
         )
     document_letter_id = fields.Many2one(
@@ -37,59 +37,50 @@ class AccountInvoice(models.Model):
         compute='_get_invoice_number',
         string="Point Of Sale",
         )
-    # TODO chequear si los necesitamos
-    # # no gravado en iva
-    # vat_untaxed = fields.Float(
-    #     compute="_get_taxes_and_prices",
-    #     digits=dp.get_precision('Account'),
-    #     string=_('VAT Untaxed')
-    #     )
-    # # exento en iva
-    # vat_exempt_amount = fields.Float(
-    #     compute="_get_taxes_and_prices",
-    #     digits=dp.get_precision('Account'),
-    #     string=_('VAT Exempt Amount')
-    #     )
-    # # von iva
-    # vat_amount = fields.Float(
-    #     compute="_get_taxes_and_prices",
-    #     digits=dp.get_precision('Account'),
-    #     string=_('VAT Amount')
-    #     )
-    # # von iva
-    # vat_base_amount = fields.Float(
-    #     compute="_get_taxes_and_prices",
-    #     digits=dp.get_precision('Account'),
-    #     string=_('VAT Base Amount')
-    #     )
-    # other_taxes_amount = fields.Float(
-    #     compute="_get_taxes_and_prices",
-    #     digits=dp.get_precision('Account'),
-    #     string=_('Other Taxes Amount')
-    #     )
-    # vat_tax_ids = fields.One2many(
-    #     compute="_get_taxes_and_prices",
-    #     comodel_name='account.invoice.tax',
-    #     string=_('VAT Taxes')
-    #     )
-    # not_vat_tax_ids = fields.One2many(
-    #     compute="_get_taxes_and_prices",
-    #     comodel_name='account.invoice.tax',
-    #     string=_('Not VAT Taxes')
-    #     )
-    # supplier_invoice_number = fields.Char(
-    #     copy=False,
-    #     )
+    vat_base_amount = fields.Monetary(
+        compute="_get_argentina_amounts",
+        string='VAT Base Amount'
+        )
+    vat_exempt_base_amount = fields.Monetary(
+        compute="_get_argentina_amounts",
+        string='VAT Exempt Base Amount'
+        )
+    # base iva cero (tenemos que agregarlo porque odoo no crea las lineas para
+    # impuestos con valor cero)
+    vat_zero_base_amount = fields.Monetary(
+        compute="_get_argentina_amounts",
+        string='VAT Zero Base Amount'
+        )
+    # no gravado en iva (tenemos que agregarlo porque odoo no crea las lineas
+    # para impuestos con valor cero)
+    vat_untaxed_base_amount = fields.Monetary(
+        compute="_get_argentina_amounts",
+        string='VAT Untaxed Base Amount'
+        )
+    vat_amount = fields.Monetary(
+        compute="_get_argentina_amounts",
+        string='VAT Amount'
+        )
+    other_taxes_amount = fields.Monetary(
+        compute="_get_argentina_amounts",
+        string='Other Taxes Amount'
+        )
+    vat_tax_ids = fields.One2many(
+        compute="_get_argentina_amounts",
+        comodel_name='account.invoice.tax',
+        string='VAT Taxes'
+        )
+    not_vat_tax_ids = fields.One2many(
+        compute="_get_argentina_amounts",
+        comodel_name='account.invoice.tax',
+        string='Not VAT Taxes'
+        )
     afip_incoterm_id = fields.Many2one(
         'afip.incoterm',
         'Incoterm',
         readonly=True,
         states={'draft': [('readonly', False)]}
         )
-    # formated_vat = fields.Char(
-    #     string='responsible',
-    #     related='commercial_partner_id.formated_vat',
-    #     )
     point_of_sale_type = fields.Selection(
         related='journal_id.point_of_sale_type',
         readonly=True,
@@ -114,6 +105,72 @@ class AccountInvoice(models.Model):
     afip_service_end = fields.Date(
         string='Service End Date'
         )
+
+    @api.one
+    def _get_argentina_amounts(self):
+        """
+        """
+        # vat values
+        # we exclude exempt vats
+        # en realidad no haria falta porque en la v9 no se crean los impuestos
+        # si el impuesto da 0, por esto mismo debemos sumar al final el impueto
+        # no gravado
+        vat_taxes = self.tax_line_ids.filtered(
+            lambda r: (
+                r.tax_id.tax_group_id.type == 'tax' and
+                r.tax_id.tax_group_id.tax == 'vat' and
+                r.tax_id.tax_group_id.afip_code != 2))
+
+        vat_amount = sum(vat_taxes.mapped('amount'))
+        self.vat_tax_ids = vat_taxes
+        self.vat_amount = vat_amount
+
+        # vat_zero_base_amount values
+        # exempt taxes are the ones with code 2
+        vat_zero_taxes = self.env['account.tax'].search([
+            ('tax_group_id.afip_code', '=', 1)])
+        invoice_lines = self.env['account.invoice.line'].search([
+            ('invoice_id', '=', self.id),
+            ('invoice_line_tax_ids', 'in', vat_zero_taxes.ids),
+            ])
+        self.vat_zero_base_amount = sum(
+            invoice_lines.mapped('price_subtotal'))
+
+        # vat exempt values
+        # exempt taxes are the ones with code 2
+        vat_exempt_taxes = self.env['account.tax'].search([
+            ('tax_group_id.afip_code', '=', 2)])
+        invoice_lines = self.env['account.invoice.line'].search([
+            ('invoice_id', '=', self.id),
+            ('invoice_line_tax_ids', 'in', vat_exempt_taxes.ids),
+            ])
+        self.vat_exempt_base_amount = sum(
+            invoice_lines.mapped('price_subtotal'))
+
+        # vat_untaxed_base_amount values
+        # exempt taxes are the ones with code 2
+        vat_untaxed_taxes = self.env['account.tax'].search([
+            ('tax_group_id.afip_code', '=', 3)])
+        invoice_lines = self.env['account.invoice.line'].search([
+            ('invoice_id', '=', self.id),
+            ('invoice_line_tax_ids', 'in', vat_untaxed_taxes.ids),
+            ])
+        self.vat_untaxed_base_amount = sum(
+            invoice_lines.mapped('price_subtotal'))
+
+        # la base del iva se considera para aquellos que tengan iva != a exento
+        # en nuestor caso todos los que tienen valor mas alicuota 0 y
+        # no gravado
+        self.vat_base_amount = (
+            sum(vat_taxes.mapped('base_amount')) +
+            self.vat_untaxed_base_amount +
+            self.vat_zero_base_amount)
+
+        # other taxes values
+        not_vat_taxes = self.tax_line_ids - vat_taxes
+        other_taxes_amount = sum(not_vat_taxes.mapped('amount'))
+        self.not_vat_tax_ids = not_vat_taxes
+        self.other_taxes_amount = other_taxes_amount
 
     @api.one
     @api.depends('document_number', 'number')
@@ -189,8 +246,13 @@ class AccountInvoice(models.Model):
         self.ensure_one()
         if self.localization == 'argentina':
             commercial_partner = self.partner_id.commercial_partner_id
-            return {'afip_responsible_type_id': (
-                    commercial_partner.afip_responsible_type_id.id)}
+            currency_rate = self.currency_id.compute(
+                    1., self.company_id.currency_id)
+            return {
+                'afip_responsible_type_id': (
+                    commercial_partner.afip_responsible_type_id.id),
+                'currency_rate': currency_rate,
+                }
         else:
             return super(
                 AccountInvoice, self).get_localization_invoice_vals()

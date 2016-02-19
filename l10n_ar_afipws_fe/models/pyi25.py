@@ -52,7 +52,6 @@ class PyI25:
 
         if not width:
             width = (len(codigo) * 3) * basewidth + (10 * narrow)
-            print width
             # width = 380
         # crear una nueva imágen
         im = Image.new("1", (width, height))
@@ -180,8 +179,6 @@ if __name__ == '__main__':
             archivo = "prueba-cae-i25.png"
             extension = 'PNG'
 
-        print "barras", barras
-        print "archivo", archivo
         pyi25.GenerarImagen(barras, archivo, extension=extension)
 
         if '--mostrar' not in sys.argv:

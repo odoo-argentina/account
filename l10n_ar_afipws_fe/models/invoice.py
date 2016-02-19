@@ -230,14 +230,31 @@ class AccountInvoice(models.Model):
 
             # # invoice amount totals:
             imp_total = str("%.2f" % abs(inv.amount_total))
+            print 'imp_total', imp_total
             imp_tot_conc = "0.00"
-            imp_neto = str("%.2f" % abs(inv.amount_untaxed))
+            print 'imp_tot_conc', imp_tot_conc
+            # vat_base_amount excludes excempt vat taxes
+            imp_neto = str("%.2f" % abs(inv.vat_base_amount))
+            print 'imp_neto', imp_neto
             imp_iva = str("%.2f" % abs(inv.vat_amount))
-            imp_subtotal = imp_neto  # TODO: not allways the case!
+            print 'imp_iva', imp_iva
+            imp_subtotal = str("%.2f" % abs(inv.amount_untaxed))
+            print 'imp_subtotal', imp_subtotal
             imp_trib = str("%.2f" % abs(inv.other_taxes_amount))
-            imp_op_ex = str("%.2f" % abs(inv.vat_exempt_amount))
+            print 'imp_trib', imp_trib
+            imp_op_ex = str("%.2f" % abs(inv.vat_exempt_base_amount))
+            print 'imp_op_ex', imp_op_ex
             moneda_id = inv.currency_id.afip_code
             moneda_ctz = inv.currency_rate
+# imp_total 1474200.00
+# imp_tot_conc 0.00
+# imp_neto 1474200.00
+# imp_iva 0.00
+# imp_subtotal 1474200.00
+# imp_trib 0.00
+# imp_op_ex 1474200.00
+# El campo 'Importe Total' ImpTotal, debe ser igual a la suma de ImpTotConc + ImpNeto + ImpOpEx + ImpTrib + ImpIVA.
+# 10070: Si ImpNeto es mayor a 0 el objeto IVA es obligatorio.
             # moneda_ctz = str(inv.company_id.currency_id.compute(
             # 1., inv.currency_id))
 
@@ -252,9 +269,9 @@ class AccountInvoice(models.Model):
             else:
                 permiso_existente = ""
             obs_generales = inv.comment
-            if inv.payment_term:
-                forma_pago = inv.payment_term.name
-                obs_comerciales = inv.payment_term.name
+            if inv.payment_term_id:
+                forma_pago = inv.payment_term_id.name
+                obs_comerciales = inv.payment_term_id.name
             else:
                 forma_pago = obs_comerciales = None
             idioma_cbte = 1     # invoice language: spanish / español
@@ -320,19 +337,21 @@ class AccountInvoice(models.Model):
             # subimos
             if afip_ws != 'wsfex':
                 for vat in self.vat_tax_ids:
-                    _logger.info('Adding VAT %s' % vat.tax_code_id.name)
+                    _logger.info(
+                        'Adding VAT %s' % vat.tax_id.tax_group_id.name)
                     ws.AgregarIva(
-                        vat.tax_code_id.afip_code,
+                        vat.tax_id.tax_group_id.afip_code,
                         "%.2f" % abs(vat.base_amount),
-                        "%.2f" % abs(vat.tax_amount),
+                        "%.2f" % abs(vat.amount),
                         )
                 for tax in self.not_vat_tax_ids:
-                    _logger.info('Adding TAX %s' % tax.tax_code_id.name)
+                    _logger.info(
+                        'Adding TAX %s' % tax.tax_id.tax_group_id.name)
                     ws.AgregarTributo(
-                        tax.tax_code_id.afip_code,
-                        tax.tax_code_id.name,
+                        tax.tax_id.tax_group_id.afip_code,
+                        tax.tax_id.tax_group_id.name,
                         "%.2f" % abs(tax.base_amount),
-                        "%.2f" % abs(tax.tax_amount),
+                        "%.2f" % abs(tax.amount),
                         )
 
             CbteAsoc = inv.get_related_invoices_data()
@@ -369,11 +388,7 @@ class AccountInvoice(models.Model):
                         u_mtx = (
                             line.product_id.uom_id.afip_code or
                             line.uos_id.afip_code)
-                        if self.invoice_id.type in (
-                                'out_invoice', 'in_invoice'):
-                            iva_id = line.vat_tax_ids.tax_code_id.afip_code
-                        else:
-                            iva_id = line.vat_tax_ids.ref_tax_code_id.afip_code
+                        iva_id = line.vat_tax_ids.tax_id.tax_group_id.afip_code
                         vat_taxes_amounts = line.vat_tax_ids.compute_all(
                                     line.price_unit, line.quantity,
                                     product=self.product_id,
