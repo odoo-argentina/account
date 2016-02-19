@@ -84,6 +84,8 @@ class AfipwsCertificate(models.Model):
 
     @api.multi
     def action_to_draft(self):
+        if self.alias_id.state != 'confirmed':
+            raise UserError(_('Certificate Alias must be confirmed first!'))
         self.write({'state': 'draft'})
         return True
 

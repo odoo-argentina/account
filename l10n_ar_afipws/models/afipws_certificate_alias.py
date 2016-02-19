@@ -91,6 +91,7 @@ class AfipwsCertificateAlias(models.Model):
         'afipws.certificate',
         'alias_id',
         'Certificates',
+        states={'cancel': [('readonly', True)]},
         )
     service_type = fields.Selection(
         [('in_house', 'In House'), ('outsourced', 'Outsourced')],
@@ -168,6 +169,7 @@ class AfipwsCertificateAlias(models.Model):
     @api.multi
     def action_cancel(self):
         self.write({'state': 'cancel'})
+        self.certificate_ids.write({'state': 'cancel'})
         return True
 
     @api.multi

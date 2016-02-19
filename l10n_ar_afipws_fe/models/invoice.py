@@ -70,6 +70,16 @@ class AccountInvoice(models.Model):
         copy=False,
         help="AFIP request result"
         )
+    validation_type = fields.Char(
+         'Validation Type',
+         compute='get_validation_type',
+         )
+
+    @api.one
+    def get_validation_type(self):
+        if self.journal_id.afip_ws:
+            self.validation_type = self.env[
+                'res.company']._get_environment_type()
 
     @api.one
     @api.depends('afip_cae')
