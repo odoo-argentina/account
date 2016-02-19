@@ -375,7 +375,8 @@ class AccountInvoice(models.Model):
                         # u_mtx = (
                         #     line.product_id.uom_id.afip_code or
                         #     line.uom_id.afip_code)
-                        # iva_id = line.vat_tax_ids.tax_id.tax_group_id.afip_code
+                        # iva_id = (
+                        #     line.vat_tax_ids.tax_id.tax_group_id.afip_code)
                         # vat_taxes_amounts = line.vat_tax_ids.compute_all(
                         #             line.price_unit, line.quantity,
                         #             product=self.product_id,

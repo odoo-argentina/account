@@ -71,7 +71,7 @@ class AfipwsCertificateAlias(models.Model):
         required=True,
         )
     cuit = fields.Char(
-        _('CUIT'),
+        'CUIT',
         compute='get_cuit',
         required=True,
         )
