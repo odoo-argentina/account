@@ -193,15 +193,7 @@ class afip_responsability(models.Model):
                         ('code', 'unique(code)', 'Code must be unique!')]
 
 
-class afip_document_type(models.Model):
-    _name = 'afip.document_type'
-    _description = 'AFIP document types'
+class res_partner_document_type(models.Model):
+    _inherit = 'res.partner.document_type'
 
-    name = fields.Char(
-        'Name', size=120, required=True)
-    code = fields.Char(
-        'Code', size=16, required=True)
-    afip_code = fields.Integer(
-        'AFIP Code', required=True)
-    active = fields.Boolean(
-        'Active', default=True)
+    afip_code = fields.Integer('AFIP Code', required=True)

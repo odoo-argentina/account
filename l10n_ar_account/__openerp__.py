@@ -21,6 +21,7 @@ Para actualizar el plan de cuentas de datos demo:
     'depends': [
           'account',
           'l10n_ar_base_vat',
+          'partner_documents'
         ],
     'external_dependencies': {
     },

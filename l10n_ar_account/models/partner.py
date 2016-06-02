@@ -12,10 +12,6 @@ class res_partner(models.Model):
 
     responsability_id = fields.Many2one(
         'afip.responsability', 'Resposability')
-    document_type_id = fields.Many2one(
-        'afip.document_type', 'Document type',)
-    document_number = fields.Char(
-        'Document number', size=64,)
     iibb = fields.Char('Gross Income', size=64)
     start_date = fields.Date('Start-up Date')
     other_afip_document_class_ids = fields.Many2many(
