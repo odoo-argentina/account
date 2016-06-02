@@ -21,6 +21,13 @@ addons:
       - python-simplejson
       - python-serial
       - python-yaml
+      # FE
+      - python-dev
+      - swig
+      - libffi-dev
+      - libssl-dev
+      - python-m2crypto
+      - python-httplib2
 #     Search your packages here:
 #       https://github.com/travis-ci/apt-package-whitelist/blob/master/ubuntu-precise
 #      - wkhtmltopdf  # only add if needed and check the before_install section below
@@ -32,42 +39,42 @@ addons:
 
 env:
   global:
-  - VERSION="8.0" TESTS="0" LINT_CHECK="0" TRANSIFEX="0"
-  - TRANSIFEX_USER='transbot@odoo-community.org'
+  - VERSION="9.0" TESTS="0" LINT_CHECK="0" TRANSIFEX="0"
+  - TRANSIFEX_USER='jjscarafia'
   # This line contains the encrypted transifex password
   # To encrypt transifex password, install travis ruby utils with:
   #   $ gem install travis --user-install
   # and use:
-  #   $ travis encrypt TRANSIFEX_PASSWORD=your-password -r owner/project
-  # Secure list for current OCA projects is in https://github.com/OCA/maintainer-quality-tools/issues/194
-  - secure: PjP88tPSwimBv4tsgn3UcQAD1heK/wcuSaSfhi2xUt/jSrOaTmWzjaW2gH/eKM1ilxPXwlPGyAIShJ2JJdBiA97hQufOeiqxdkWDctnNVVEDx2Tk0BiG3PPYyhXPgUZ+FNOnjZFF3pNWvzXTQaB0Nvz8plqp93Ov/DEyhrCxHDs=
+    # $ travis encrypt TRANSIFEX_PASSWORD=your-password -r owner/project
+  - secure: Bpz07pxQRfbc5uKzs0en4px536TXrGO8CwBJqBJW2LmtaJYRQ+bpvPIxk/5DpaMMi7qzrGuZ4DMzPOr+neN+lHArxG5B6gQlEgQqu/wQCIzkgewuNSZoV8Sa4ecrA8/eSx9/tEBUxYek79CtL8glvx0T7YzpraTtvyKtcjp6ZbHEV7RaVBTZWMPDXXhVkK5QUugyMt3BA0irLUvvIcUp87bJhP3qyQr/MHk0E5+n/s5nuvni2rDnNH2V0ACrz1kztjEL7vBd2ckjyHtXhdj+Un81CBOfZG26e0jVsyI0PmILcGnpeLkkzkNRJI9ec1yfKrVsm0l0mC6S5zpLBYUoeXzEPa+uiDiEMyV2cgAszN1tKJ6ZRcm4kcre0Z+EW/ar5Tlg0PW5/igH0q9Hxx8RJwE2bA+sTUGNmBSM0IPoqf7FjlSxAV/xjo7LmetKFfUgewkxwiVxgyYdE4fyg8ftHBz6cEKRzw8QK9jCuhXZdvjttX7MQkLtj79CEd0rzgE2GF0/WXEt2HEfAvrg5KPHOFQhIkeC8S4nzbMcdJJY6MYymmOhjRQEbZfK1Ptjwb+wT+a63yh9A/Rx6SrpBk/EPf/pSv2rHJD3p6SHi6MWiw7K+VGyejEMQWMolgzI8XwrEbBX8jkKvOqHjLRA2PEUnFy50J9Zt1Ri2sA8umP3fUY=
   # Use the following lines if you need to manually change the transifex project slug or/and the transifex organization.
   # The default project slug is owner-repo_name-version (with dash in the version string).
   # The default organization is the owner of the repo.
   # The default fill up resources (TM) is True.
   # The default team is 23907. https://www.transifex.com/organization/oca/team/23907/
   # - TRANSIFEX_PROJECT_SLUG=
-  # - TRANSIFEX_ORGANIZATION=
+  - TRANSIFEX_ORGANIZATION='odoo-argentina'
   # - TRANSIFEX_FILL_UP_RESOURCES=
-  # - TRANSIFEX_TEAM=
+  - TRANSIFEX_TEAM='58916'
 
   matrix:
   - LINT_CHECK="1"
   - TRANSIFEX="1"
   - TESTS="1" ODOO_REPO="odoo/odoo"
-  - TESTS="1" ODOO_REPO="OCA/OCB"
 # either use the two lines above or the two below. Don't change the default if
 # it's not necessary (it is only necessary if modules in your repository can't
 # be installed in the same database. And you get a huge speed penalty in your
 # tests)
 #  - TESTS="1.0" ODOO_REPO="odoo/odoo" UNIT_TEST="1"
-#  - TESTS="1.0" ODOO_REPO="OCA/OCB" UNIT_TEST="1"
 
 virtualenv:
   system_site_packages: true
 
 install:
   - git clone --depth=1 https://github.com/OCA/maintainer-quality-tools.git ${HOME}/maintainer-quality-tools
+  # repository requirements
+  - pip install -r requirements.txt
+  - pip install -r requirements2.txt
   - export PATH=${HOME}/maintainer-quality-tools/travis:${PATH}
   - travis_install_nightly
 

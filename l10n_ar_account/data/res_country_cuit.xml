@@ -331,7 +331,7 @@
             <field name='cuit_fisica'>50000001152</field>
             <field name='cuit_otro'>51600001152</field>
         </record> 
-	<record model='res.country' id='base.uk'><!-- gb -->
+    <record model='res.country' id='base.uk'><!-- gb -->
             <field name='cuit_juridica'>55000004269</field>
             <field name='cuit_fisica'>50000004267</field>
             <field name='cuit_otro'>51600004267</field>

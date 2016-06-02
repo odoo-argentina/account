@@ -5,7 +5,7 @@
 # Translators:
 msgid ""
 msgstr ""
-"Project-Id-Version: odoo-argentina (8.0)\n"
+"Project-Id-Version: odoo-argentina (9.0)\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-10-18 02:29+0000\n"
 "PO-Revision-Date: 2015-10-08 20:11+0000\n"
@@ -221,16 +221,16 @@ msgid "AFIP Point of Sales"
 msgstr "AFIP Point of Sales"
 
 #. module: l10n_ar_invoice
-#: view:afip.responsability:l10n_ar_invoice.view_afip_responsability_form
-#: view:afip.responsability:l10n_ar_invoice.view_afip_responsability_tree
-#: model:ir.actions.act_window,name:l10n_ar_invoice.act_afip_responsability
-msgid "AFIP Responsability"
-msgstr "AFIP Responsability"
+#: view:afip.responsible:l10n_ar_invoice.view_afip_responsible_form
+#: view:afip.responsible:l10n_ar_invoice.view_afip_responsible_tree
+#: model:ir.actions.act_window,name:l10n_ar_invoice.act_afip_responsible
+msgid "AFIP responsible"
+msgstr "AFIP responsible"
 
 #. module: l10n_ar_invoice
-#: model:ir.model,name:l10n_ar_invoice.model_afip_responsability
-msgid "AFIP VAT Responsability"
-msgstr "AFIP VAT Responsability"
+#: model:ir.model,name:l10n_ar_invoice.model_afip_responsible
+msgid "AFIP Responsible Type"
+msgstr "AFIP Responsible Type"
 
 #. module: l10n_ar_invoice
 #: model:ir.model,name:l10n_ar_invoice.model_afip_document_type
@@ -279,7 +279,7 @@ msgstr "Acreedores varios"
 
 #. module: l10n_ar_invoice
 #: field:afip.document_class,active:0 field:afip.document_letter,active:0
-#: field:afip.document_type,active:0 field:afip.responsability,active:0
+#: field:afip.document_type,active:0 field:afip.responsible,active:0
 msgid "Active"
 msgstr "Active"
 
@@ -654,12 +654,12 @@ msgstr "Cheques diferidos"
 
 #. module: l10n_ar_invoice
 #: field:afip.document_type,code:0 field:afip.incoterm,afip_code:0
-#: field:afip.responsability,code:0
+#: field:afip.responsible,code:0
 msgid "Code"
 msgstr "Code"
 
 #. module: l10n_ar_invoice
-#: sql_constraint:afip.responsability:0
+#: sql_constraint:afip.responsible:0
 msgid "Code must be unique!"
 msgstr "Code must be unique!"
 
@@ -740,7 +740,7 @@ msgstr "Create Journals"
 #: field:afip.document_letter,create_uid:0
 #: field:afip.document_type,create_uid:0 field:afip.incoterm,create_uid:0
 #: field:afip.point_of_sale,create_uid:0
-#: field:afip.responsability,create_uid:0
+#: field:afip.responsible,create_uid:0
 msgid "Created by"
 msgstr "Created by"
 
@@ -751,7 +751,7 @@ msgstr "Created by"
 #: field:afip.document_letter,create_date:0
 #: field:afip.document_type,create_date:0 field:afip.incoterm,create_date:0
 #: field:afip.point_of_sale,create_date:0
-#: field:afip.responsability,create_date:0
+#: field:afip.responsible,create_date:0
 msgid "Created on"
 msgstr "Created on"
 
@@ -881,11 +881,11 @@ msgstr "Default Debit Account"
 #: help:res.company,invoice_vat_discrimination_default:0
 msgid ""
 "Definie behaviour on invoices reports. Discrimination or not will depend in "
-"partner and company responsability and AFIP letters setup:            * If "
+"partner and company responsible and AFIP letters setup:            * If "
 "No Discriminate Default, if no match found it won't discriminate by default"
 "            * If Discriminate Default, if no match found it would "
 "discriminate by default            "
-msgstr "Definie behaviour on invoices reports. Discrimination or not will depend in partner and company responsability and AFIP letters setup:            * If No Discriminate Default, if no match found it won't discriminate by default            * If Discriminate Default, if no match found it would discriminate by default            "
+msgstr "Definie behaviour on invoices reports. Discrimination or not will depend in partner and company responsible and AFIP letters setup:            * If No Discriminate Default, if no match found it won't discriminate by default            * If Discriminate Default, if no match found it would discriminate by default            "
 
 #. module: l10n_ar_invoice
 #: model:account.account,name:l10n_ar_invoice.ri_descuentos_obtenidos
@@ -1300,7 +1300,7 @@ msgstr "Honorarios profesionales administracion"
 #: field:account.journal.create.wizard,id:0 field:afip.document_class,id:0
 #: field:afip.document_letter,id:0 field:afip.document_type,id:0
 #: field:afip.incoterm,id:0 field:afip.point_of_sale,id:0
-#: field:afip.responsability,id:0
+#: field:afip.responsible,id:0
 msgid "ID"
 msgstr "ID"
 
@@ -1515,11 +1515,11 @@ msgid "If True, the vat will be discriminated on invoice report."
 msgstr "If True, the vat will be discriminated on invoice report."
 
 #. module: l10n_ar_invoice
-#: help:afip.responsability,vat_tax_required_on_sales_invoices:0
+#: help:afip.responsible,vat_tax_required_on_sales_invoices:0
 msgid ""
 "If True, then a vay tax is mandatory on each sale invoice for companies of "
-"this responsability"
-msgstr "If True, then a vay tax is mandatory on each sale invoice for companies of this responsability"
+"this responsible"
+msgstr "If True, then a vay tax is mandatory on each sale invoice for companies of this responsible"
 
 #. module: l10n_ar_invoice
 #: help:account.journal.create.wizard,allow_date:0
@@ -1747,7 +1747,7 @@ msgid "Issue Check"
 msgstr "Issue Check"
 
 #. module: l10n_ar_invoice
-#: field:afip.responsability,issued_letter_ids:0
+#: field:afip.responsible,issued_letter_ids:0
 msgid "Issued Document Letters"
 msgstr "Issued Document Letters"
 
@@ -1822,7 +1822,7 @@ msgstr "Journals"
 #: field:afip.document_class,write_uid:0
 #: field:afip.document_letter,write_uid:0 field:afip.document_type,write_uid:0
 #: field:afip.incoterm,write_uid:0 field:afip.point_of_sale,write_uid:0
-#: field:afip.responsability,write_uid:0
+#: field:afip.responsible,write_uid:0
 msgid "Last Updated by"
 msgstr "Last Updated by"
 
@@ -1833,7 +1833,7 @@ msgstr "Last Updated by"
 #: field:afip.document_letter,write_date:0
 #: field:afip.document_type,write_date:0 field:afip.incoterm,write_date:0
 #: field:afip.point_of_sale,write_date:0
-#: field:afip.responsability,write_date:0
+#: field:afip.responsible,write_date:0
 msgid "Last Updated on"
 msgstr "Last Updated on"
 
@@ -1886,7 +1886,7 @@ msgstr "Municipal Taxes"
 #. module: l10n_ar_invoice
 #: field:afip.document_class,name:0 field:afip.document_letter,name:0
 #: field:afip.document_type,name:0 field:afip.incoterm,name:0
-#: field:afip.responsability,name:0
+#: field:afip.responsible,name:0
 msgid "Name"
 msgstr "Name"
 
@@ -1896,7 +1896,7 @@ msgid "Name Sufix"
 msgstr "Name Sufix"
 
 #. module: l10n_ar_invoice
-#: sql_constraint:afip.document_letter:0 sql_constraint:afip.responsability:0
+#: sql_constraint:afip.document_letter:0 sql_constraint:afip.responsible:0
 msgid "Name must be unique!"
 msgstr "Name must be unique!"
 
@@ -2271,9 +2271,9 @@ msgstr "Plan de Impuestos de Argentina para Responsables Inscriptos"
 #: code:addons/l10n_ar_invoice/models/invoice.py:669
 #, python-format
 msgid ""
-"Please, set your company responsability in the company partner before "
+"Please, set your company responsible in the company partner before "
 "continue."
-msgstr "Please, set your company responsability in the company partner before continue."
+msgstr "Please, set your company responsible in the company partner before continue."
 
 #. module: l10n_ar_invoice
 #: field:account.journal.create.wizard,point_of_sale_id:0
@@ -2439,7 +2439,7 @@ msgid "Receipt Invoice"
 msgstr "Receipt Invoice"
 
 #. module: l10n_ar_invoice
-#: field:afip.responsability,received_letter_ids:0
+#: field:afip.responsible,received_letter_ids:0
 msgid "Received Document Letters"
 msgstr "Received Document Letters"
 
@@ -2497,19 +2497,19 @@ msgid "Reserva legal"
 msgstr "Reserva legal"
 
 #. module: l10n_ar_invoice
-#: model:ir.ui.menu,name:l10n_ar_invoice.menu_action_afip_responsability
+#: model:ir.ui.menu,name:l10n_ar_invoice.menu_action_afip_responsible
 msgid "Responsabilities"
 msgstr "Responsabilities"
 
 #. module: l10n_ar_invoice
-#: field:account.invoice,responsability_id:0
-msgid "Responsability"
-msgstr "Responsability"
+#: field:account.invoice,responsible_id:0
+msgid "responsible"
+msgstr "responsible"
 
 #. module: l10n_ar_invoice
-#: field:res.partner,responsability_id:0
-msgid "Resposability"
-msgstr "Resposability"
+#: field:res.partner,responsible_id:0
+msgid "Responsible"
+msgstr "Responsible"
 
 #. module: l10n_ar_invoice
 #: model:account.account,name:l10n_ar_invoice.ri_resultado_acumulados
@@ -2949,7 +2949,7 @@ msgid "VAT Exempt Amount"
 msgstr "VAT Exempt Amount"
 
 #. module: l10n_ar_invoice
-#: field:afip.responsability,vat_tax_required_on_sales_invoices:0
+#: field:afip.responsible,vat_tax_required_on_sales_invoices:0
 msgid "VAT Tax Required on Sales Invoices?"
 msgstr "VAT Tax Required on Sales Invoices?"
 
@@ -3046,8 +3046,8 @@ msgstr "You are using argentinian localization and there are some tax codes that
 #. module: l10n_ar_invoice
 #: code:addons/l10n_ar_invoice/models/invoice.py:668
 #, python-format
-msgid "Your company has not setted any responsability"
-msgstr "Your company has not setted any responsability"
+msgid "Your company has not setted any responsible"
+msgstr "Your company has not setted any responsible"
 
 #. module: l10n_ar_invoice
 #: view:account.invoice:l10n_ar_invoice.view_account_invoice_filter
