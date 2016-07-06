@@ -1,20 +1,16 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-# For copyright and license notices, see __openerp__.py file in module root
-# directory
-##############################################################################
-from . import account_journal
-from . import account_tax
-from . import account_document_letter
-from . import afip_responsible_type
-from . import account_document_type
-from . import afip_incoterm
-from . import res_partner
-from . import res_country
-from . import res_currency
-from . import res_company
-from . import account_invoice_tax
-from . import account_invoice
-from . import product_uom
-from . import account_chart_template
+import account_journal
+import account_tax
+import account_document_letter
+import afip_responsible_type
+import account_document_type
+import afip_incoterm
+import res_partner
+import res_country
+import res_currency
+import res_company
+import account_invoice_tax
+import account_invoice
+import product_uom
+import account_chart_template
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
